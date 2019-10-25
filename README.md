@@ -1,5 +1,5 @@
 
-# <center> [所有文章](posts.md) | [归档](archive.md) | [flutter 笔记](https://lzyprime.top/flutter) | [about](about.md) </center>
+# [所有文章](posts.md) | [归档](archive.md) | [flutter 笔记](https://lzyprime.top/flutter) | [about](about.md)
 
 
 ## <center> 最近动态 </center>
