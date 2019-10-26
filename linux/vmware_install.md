@@ -15,7 +15,7 @@
 当然 `deepin-wine` 仍在发展， 相信以后会越来越好，你问我滋不滋瓷，我当然是滋瓷的嘛。 如果你只是为了简单用一些软件，收发消息之类的，可能`deepin-wine`就足够了， 没必要虚拟机了, 你可以尝试`deepin` 系统， 或者其他发行版下尝试`deepin-wine`。 地址：
 [deepin-wine-ubuntu github 地址](https://github.com/wszqkzqk/deepin-wine-ubuntu)
 
-### 2019.10 的官方 `qq linux版`， 这是可开端
+### 2019.10 的官方 `qq linux版`
 
 推出这个版本的因素有很多， 很重要的一点是: 腾讯内部 `linux(ubuntu 18.04)` 入域成功了， 成为很多开发与运维的新选择， 但是对于这些软件， 遇到了同样的问题， `qq 企业微信 微信` 等等，工作要用到， 所以需求提上日程很正常
 
