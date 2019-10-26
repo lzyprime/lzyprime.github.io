@@ -5,8 +5,9 @@
 
 
 body {
-    background-image: url('bg.jpg');
-    background-size: cover;
+    background: url(bg.jpg);
+    background-position: center;
+    background-size: auto;
 }
 
 .page-header {
