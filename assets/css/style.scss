@@ -3,12 +3,7 @@
 
 @import 'jekyll-theme-cayman';
 
-
-body {
+header {
     background-image: url('bg.jpg');
+    background-size: cover;
 }
-
-main {
-	background-color: white;
-}
-
