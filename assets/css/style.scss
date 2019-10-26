@@ -3,11 +3,15 @@
 
 @import 'jekyll-theme-cayman';
 
-.page-header {
+body {
     background-image: url('bg.jpg');
     background-size: cover;
 }
+.page-header {
+    background-image: none;
+    background-color: transparent;
+}
 
 .main-content {
-   background-color: red;
+   background-color: rgba(224, 224, 224, 0.65);
 }
