@@ -3,7 +3,11 @@
 
 @import 'jekyll-theme-cayman';
 
-header {
+.page-header {
     background-image: url('bg.jpg');
     background-size: cover;
+}
+
+.main-content {
+   background-color: red;
 }
