@@ -21,3 +21,5 @@
 ## flutter web
 - [flutter web 搭建静态博客](flutter_web/flutter_web搭建静态博客.md)
 
+## flutter 笔记
+- [flutter mvvm 模式](./flutter_mvvm_模式)
