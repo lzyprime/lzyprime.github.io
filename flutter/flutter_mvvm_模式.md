@@ -139,6 +139,17 @@ class MyApp extends StatelessWidget {
 }
 ```
 
+## 效果图
+
+- ###  state == 0， 初始状态
+![state0](flutter_mvvm_模式/state0.png)
+
+- ### state == 1, 点击登录后，显示加载
+![state1](flutter_mvvm_模式/state1.png)
+
+- ### state == 2, 登录成功
+![state2](flutter_mvvm_模式/state2.png)
+
 ## ~λ：
 
 - 只是简单例子。mvvm作为思想，怎么抽离数据和ui视具体情况而定，灵活解决
