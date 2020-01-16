@@ -1,7 +1,29 @@
 # flutter mvvm 模式
 
 > ## [lzyprime 博客](http://lzyprime.github.io)
-> #### 更新时间：2019.11.17  
+> #### 更新时间：2020.01.16
+> #### 创建时间：2019.11.17  
+
+## 2020.01.16 更新
+yesterday， 收到网友反馈，照抄如下内容不好用，希望我出个demo。 咋能不好用呢，下边这代码本身就可以当 demo 啊。于是我也照抄试了试，我也是一片爆红。。
+
+我按 model -> viewModel -> view 的顺序往下写，结果 model 就出错了。原因很简单： *`rxdart 更新了！！`*， 我原以为就算更新也不至于换接口这么频啊。好家伙，又低估他们了。
+
+新版 `rxdart` 去掉了 `Observable` 类，相当于给原生 `Stream` 提供一组拓展函数。（详情可看[https://pub.dev/packages/rxdart](https://pub.dev/packages/rxdart))，所以 `model` 里的返回值直接是原生 `Stream`，  不用再套一层。 其他该怎么用还怎么用。
+
+原文代码仍可用，注意插件版本号。
+
+这是用最新插件写的demo，[github 仓库: flutter_demos 分支: mvvm_demo](https://github.com/lzyprime/flutter_demos/tree/mvvm_demo)
+
+```shell
+git clone -b mvvm_demo https://github.com/lzyprime/flutter_demos.git
+```
+
+### 另外，重新写一下做一下补充。 [新文内容, 补充说明](flutter_mvvm_模式2.md)
+
+---
+
+## *原文内容*：
 
 ## λ：
 
@@ -21,7 +43,7 @@
 
 ## flutter项目 mvvm
 
-### 1. 添加插件：`provider` , `rxdart`。 `pubspec.yaml` 文件
+### 1. 添加插件：`provider ^3.1.0+1` , `rxdart ^0.22.2`。 在 `pubspec.yaml` 文件
 
 ![pubspec.yaml](flutter_mvvm_模式/pubspec.png)
 
