@@ -23,7 +23,7 @@ mvvm 在 [原文章](https://lzyprime.github.io/flutter/flutter_mvvm_模式.html
 
 ## flutter项目 mvvm
 
-### 1. 添加插件：`provider ^4.0.1`（`rxdart ^0.23.1` PS: 如果用不到 `rxdart` 的东西，可以不要这个插件。 在 `pubspec.yaml` 文件
+### 1. 添加插件：`provider ^4.0.1`（`rxdart ^0.23.1` PS: 如果用不到 `rxdart` 的东西，可以不要这个插件）。 在 `pubspec.yaml` 文件
 
 ![pubspec.yaml](flutter_mvvm_模式2/pubspec.png)
 

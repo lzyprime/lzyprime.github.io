@@ -5,9 +5,9 @@
 > #### 创建时间：2019.11.17  
 
 ## 2020.01.16 更新
-yesterday， 收到网友反馈，照抄如下内容不好用，希望我出个demo。 咋能不好用呢，下边这代码本身就可以当 demo 啊。于是我也照抄试了试，我也是一片爆红。。
+yesterday， 收到网友反馈，照抄如下内容不好用，希望我出个demo。 咋能不好用呢，下边这代码本身就可以当 demo 啊。于是老夫也照抄试了试，老夫也是一片爆红。。
 
-我按 model -> viewModel -> view 的顺序往下写，结果 model 就出错了。原因很简单： *`rxdart 更新了！！`*， 我原以为就算更新也不至于换接口这么频啊。好家伙，又低估他们了。
+老夫按 model -> viewModel -> view 的顺序往下写，结果 model 就出错了。原因很简单： *`rxdart 更新了！！`*， 原以为就算更新也不至于换接口这么频啊。好家伙，又低估他们了。
 
 新版 `rxdart` 去掉了 `Observable` 类，相当于给原生 `Stream` 提供一组拓展函数。（详情可看[https://pub.dev/packages/rxdart](https://pub.dev/packages/rxdart))，所以 `model` 里的返回值直接是原生 `Stream`，  不用再套一层。 其他该怎么用还怎么用。
 
