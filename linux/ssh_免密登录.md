@@ -1,8 +1,9 @@
 # ssh 免密登录
 
-> ## [lzyprime 博客](http://lzyprime.github.io)
-> #### 更新时间：2020.6.19
-> #### 创建时间：2019.6.19
+> [lzyprime 博客 (github)](https://lzyprime.github.io)  
+> 更新时间：2020.6.19  
+> qq及邮箱：2383518170  
+
 
 ## ssh 免密失败可能原因
 

@@ -1,8 +1,9 @@
 # flutter mvvm 模式 2020.01
 
-> ## [lzyprime 博客](http://lzyprime.github.io)
-> #### 更新时间：2020.01.16
-> #### 创建时间：2020.01.16  
+> [lzyprime 博客 (github)](https://lzyprime.github.io)  
+> 创建时间：2020.01.16  
+> qq及邮箱：2383518170  
+
 
 ## λ：
 
