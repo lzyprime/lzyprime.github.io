@@ -4,6 +4,7 @@
 
 | 文章 | 日期 |
 | :- | -: |
+| [i3 桌面](linux/i3桌面.md) | 2020.10.19 |
 | [flutter自定义弹窗(一)：overlay](flutter/flutter_overlay.md) | 2020.08.20 |
 | [ssh 免密登录](linux/ssh_免密登录.md) | 2020.06.19 |
 | [flutter webView 使用以及与 js 互操作](flutter/flutter_webview.md) | 2020.03.06 |
