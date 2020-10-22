@@ -1,9 +1,8 @@
 &nbsp;
 
-#### [android app](https://lzyprime.github.io/DNUIFoodApp/)
-
 | 文章 | 日期 |
 | :- | -: |
+| [kotlin android 笔记](kotlin_android) | 2020.10.22 |
 | [i3 桌面](linux/i3桌面.md) | 2020.10.19 |
 | [flutter自定义弹窗(一)：overlay](flutter/flutter_overlay.md) | 2020.08.20 |
 | [ssh 免密登录](linux/ssh_免密登录.md) | 2020.06.19 |
@@ -16,3 +15,7 @@
 | [flutter web 搭建静态博客](flutter/flutter_web/flutter_web搭建静态博客.md) | 2019.10.22 |
 | [flutter 笔记](flutter/flutter.md) | 2019.10.22 |
 
+---
+## 链接 🔗
+
+#### [android app](https://lzyprime.github.io/DNUIFoodApp/)
