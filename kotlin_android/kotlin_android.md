@@ -14,7 +14,7 @@
 
 那时`kotlin`还在`1.2.*`，协程还没稳定。而`android`还没重构`andoridx`库，也没有`jetpack`。当时好用的kotlin android库是`anko`，现在已经停止维护，因为有了`jetpack`。尽管如此，单凭`kotlin`语言和原有库的支持，已经比`java`好太多了。
 
-现在，Google出了`androidx jetpack`，`kotlin 协程`也早就稳定，更重要的是Google健全了开发文档。[andorid developer 官网](https://developer.android.com/?hl=zh-cn) 从`mvvm`架构，到组件和工具的最佳组合，都有详细文档。同时还有`jetpack`最佳实践demo应用：[sunflower](https://github.com/android/sunflower)。并且明确说明部分内容只支持`kotlin`。
+现在，Google出了`androidx jetpack`，`kotlin 协程`也早就稳定，更重要的是Google健全了开发文档。[andorid developer 官网](https://developer.android.google.cn/?hl=zh-cn) 从`mvvm`架构，到组件和工具的最佳组合，都有详细文档。同时还有`jetpack`最佳实践demo应用：[sunflower](https://github.com/android/sunflower)。并且明确说明部分内容只支持`kotlin`。
 
 要是新起个项目还是用`java`或者换汤不换药：仅仅是换个语言，架构和库仍是老旧过时。那就太不应该了，在我看来只是不爱学习罢了，其他都是借口。别人费力才去掉的诟病、糟粕，全都被找回来，还觉得自己起个架构很牛逼，优越感油然而生，于是觉得没人比得上自己，不必学习靠现有的知识储量也能胜任工作。因为不学习，所以遇到问题又拿出远古的解决方案……  这就是循环。
 
@@ -25,4 +25,4 @@
 ## 学习来源：
 - [kotlin 官网](https://kotlinlang.org/)
 - [kotlin 中文](https://www.kotlincn.net/)
-- [andorid developer 官网](https://developer.android.com/?hl=zh-cn)
+- [andorid developer 官网](https://developer.android.google.cn/?hl=zh-cn)
