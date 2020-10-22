@@ -2,7 +2,7 @@
 
 | 文章 | 日期 |
 | :- | -: |
-| [kotlin android 笔记](kotlin_android) | 2020.10.22 |
+| [kotlin android 笔记](kotlin_android/kotlin_android.md) | 2020.10.22 |
 | [i3 桌面](linux/i3桌面.md) | 2020.10.19 |
 | [flutter自定义弹窗(一)：overlay](flutter/flutter_overlay.md) | 2020.08.20 |
 | [ssh 免密登录](linux/ssh_免密登录.md) | 2020.06.19 |
