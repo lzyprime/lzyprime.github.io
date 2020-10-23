@@ -2,6 +2,8 @@
 
 | 文章 | 日期 |
 | :- | -: |
+| [android mvvm架构](kotlin_android/android_mvvm.md) | 2020.10.23 |
+| [kotlin & android 笔记目录](kotlin_android/toc.md) | 2020.10.23 |
 | [kotlin android 笔记](kotlin_android/kotlin_android.md) | 2020.10.22 |
 | [i3 桌面](linux/i3桌面.md) | 2020.10.19 |
 | [flutter自定义弹窗(一)：overlay](flutter/flutter_overlay.md) | 2020.08.20 |
