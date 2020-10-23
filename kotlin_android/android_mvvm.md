@@ -32,7 +32,7 @@ git clone -b mvvm https://github.com/lzyprime/android_demos
 ### lifecycle ktx：ViewModel, LiveData
 
 > - [生命周期处理](https://developer.android.google.cn/topic/libraries/architecture/lifecycle?hl=zh_cn)
->  - [Lifecycle](https://developer.android.google.cn/jetpack/androidx/releases/lifecycle?hl=zh_cn#declaring_dependencies)
+> - [Lifecycle](https://developer.android.google.cn/jetpack/androidx/releases/lifecycle?hl=zh_cn#declaring_dependencies)
 > - [ViewModel](https://developer.android.google.cn/topic/libraries/architecture/viewmodel?hl=zh_cn)
 > - [LiveData](https://developer.android.google.cn/topic/libraries/architecture/livedata)
 
