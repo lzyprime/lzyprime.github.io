@@ -4,8 +4,9 @@
 > 创建时间：2020.10.23  
 > qq及邮箱：2383518170  
 
+## [kotlin & android 笔记](kotlin_android.md)
 
-## [kotlin & android 笔记目录](toc.md)
+---
 
 ## λ：
 
