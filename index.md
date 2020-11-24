@@ -2,6 +2,7 @@
 
 | 文章 | 日期 |
 | :- | -: |
+| [android navigation组件](kotlin_android/android_navigation.md) | 2020.11.24 |
 | [android mvvm架构](kotlin_android/android_mvvm.md) | 2020.10.23 |
 | [kotlin & android 笔记目录](kotlin_android/toc.md) | 2020.10.23 |
 | [kotlin android 笔记](kotlin_android/kotlin_android.md) | 2020.10.22 |
@@ -21,3 +22,4 @@
 ## 链接 🔗
 
 #### [android app](https://lzyprime.github.io/DNUIFoodApp/)
+#### [kotlin & android 笔记](https://lzyprime.github.io/kotlin_android/kotlin_android)
