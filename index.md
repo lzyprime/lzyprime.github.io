@@ -2,6 +2,7 @@
 
 | 文章 | 日期 |
 | :- | -: |
+| [Android 底部导航栏+页面切换](kotlin_android/android_bottom_navigation.md) | 2020.11.25 |
 | [android navigation组件](kotlin_android/android_navigation.md) | 2020.11.24 |
 | [android mvvm架构](kotlin_android/android_mvvm.md) | 2020.10.23 |
 | [kotlin & android 笔记目录](kotlin_android/toc.md) | 2020.10.23 |
