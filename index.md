@@ -2,6 +2,8 @@
 
 | 文章 | 日期 |
 | :- | -: |
+| [746. 使用最小花费爬楼梯 (每日一题)](leetcode/746_使用最小花费爬楼梯_20201221.md) | 2020.12.21 |
+| [leetcode 记录](leetcode/leetcode.md) | 2020.12.21 |
 | [Android 底部导航栏+页面切换](kotlin_android/android_bottom_navigation.md) | 2020.12.21更新 |
 | [android skia图形库](kotlin_android/android_skia.md) | 2020.12.18 |
 | [android navigation组件](kotlin_android/android_navigation.md) | 2020.11.24 |
@@ -25,3 +27,7 @@
 
 #### [android app](https://lzyprime.github.io/DNUIFoodApp/)
 #### [kotlin & android 笔记](https://lzyprime.github.io/kotlin_android/kotlin_android)
+#### [leetcode 笔记](https://lzyprime.github.io/leetcode/leetcode)
+
+---
+> 文章列表展示规则：按时间倒序, 更新时间优先于创建时间
