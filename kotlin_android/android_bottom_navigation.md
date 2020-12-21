@@ -1,12 +1,40 @@
 # Android 底部导航栏+页面切换
 
 > [lzyprime 博客 (github)](https://lzyprime.github.io)   
-> 创建时间：2020.11.25   
+> 更新时间: 2020.12.21  
+> 创建时间：2020.11.25  
 > qq及邮箱：2383518170  
 
 ## [kotlin & android 笔记](https://lzyprime.github.io/kotlin_android/kotlin_android)
 
 ---
+
+## 更新
+
+### 2020.12.21 解决 ***“在item2页面点击返回键会返回item1, 而非退出”*** 问题
+
+之前笔记里（[android navigation组件](https://lzyprime.github.io/kotlin_android/android_navigation)）记录整个导航组件时, 其中关于自定义返回导航只是简单一提， 并用于在`MainActivity`的回调里整体组织路由。
+
+[提供自定义返回导航 官网文档](https://developer.android.google.cn/guide/navigation/navigation-custom-back?hl=zh-cn)
+
+给`Item2, Item3`页面注册返回事件， `addCallBack`用`(LifecycleOwner, OnBackPressedCallback)`版本, 会检测生存期，在页面被销毁时自动删掉回调。`OnBackPressedCallback` 构造函数传入 `Boolean` 表示回调初始是否开启（`isEnable`）, 之后可以调用它的 `setEnable` 来改变状态。 
+
+```kotlin
+// 仓库已经更新
+class Item2Fragment: Fragment(R.layout.item2_fragment){
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(this, object :OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                requireActivity().finish()
+            }
+        })
+    }
+}
+```
+
+-------
+# 原文：
 
 ## λ：
 
