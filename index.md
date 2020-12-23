@@ -2,7 +2,8 @@
 
 | 文章 | 日期 |
 | :- | -: |
-| [746. 使用最小花费爬楼梯 (每日一题)](leetcode/746_使用最小花费爬楼梯_20201221.md) | 2020.12.21 |
+| [103. 二叉树的锯齿形层序遍历(每日一题 2020.12.22)](leetcode/103_二叉树的锯齿形层序遍历_20201222.md) | 2020.12.22 |
+| [746. 使用最小花费爬楼梯 (每日一题 2020.12.21)](leetcode/746_使用最小花费爬楼梯_20201221.md) | 2020.12.21 |
 | [leetcode 记录](leetcode/leetcode.md) | 2020.12.21 |
 | [Android 底部导航栏+页面切换](kotlin_android/android_bottom_navigation.md) | 2020.12.21更新 |
 | [android skia图形库](kotlin_android/android_skia.md) | 2020.12.18 |
