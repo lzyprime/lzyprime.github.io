@@ -14,6 +14,7 @@ if [ -f "$file_path" ]; then echo "文件已存在"; exit; fi
 mkdir -p ${file_path%/*}
 
 cat > $file_path << EEE
+$file_path
 # 
 
 > [lzyprime 博客 (github)](https://lzyprime.github.io)   
