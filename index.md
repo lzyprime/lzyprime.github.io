@@ -1,5 +1,15 @@
 &nbsp;
 
+## 链接 🔗
+
+#### [android app](https://lzyprime.github.io/DNUIFoodApp/) | [kotlin & android 笔记](https://lzyprime.github.io/kotlin_android/kotlin_android) | [leetcode 笔记](https://lzyprime.github.io/leetcode/leetcode)
+
+---
+
+> 文章列表展示规则：按时间倒序, 更新时间优先于创建时间
+
+---
+
 | 文章 | 日期 |
 | :- | -: |
 | [721. 账户合并(每日一题)](leetcode/721_账户合并.md) | 2021.1.18 |
@@ -38,13 +48,3 @@
 | [我的博客，最后还是“返璞归真”了](posts/我的博客最后还是返璞归真了.md) | 2019.10.23 |
 | [flutter web 搭建静态博客](flutter/flutter_web/flutter_web搭建静态博客.md) | 2019.10.22 |
 | [flutter 笔记](flutter/flutter.md) | 2019.10.22 |
-
----
-## 链接 🔗
-
-#### [android app](https://lzyprime.github.io/DNUIFoodApp/)
-#### [kotlin & android 笔记](https://lzyprime.github.io/kotlin_android/kotlin_android)
-#### [leetcode 笔记](https://lzyprime.github.io/leetcode/leetcode)
-
----
-> 文章列表展示规则：按时间倒序, 更新时间优先于创建时间
