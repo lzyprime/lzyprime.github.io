@@ -12,6 +12,7 @@
 
 | 文章 | 日期 |
 | :- | -: |
+| [android ViewBinding, DataBinding](kotlin_android/viewbinding_databinding.md) | 2021.4.23 |
 | [263. 丑数(每日一题)](leetcode/263_丑数.md) | 2021.4.10 |
 | [153. 寻找旋转排序数组中的最小值(每日一题)](leetcode/153_寻找旋转排序数组中的最小值.md) | 2021.4.8 |
 | [81. 搜索旋转排序数组 II(每日一题)](leetcode/81_搜索旋转排序数组II.md) | 2021.4.7 |
