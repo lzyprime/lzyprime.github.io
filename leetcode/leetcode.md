@@ -1,9 +1,7 @@
-# leetcode 记录
-
-> [lzyprime 博客 (github)](https://lzyprime.github.io)   
-> 创建时间：2020.12.21  
-> qq及邮箱：2383518170  
-
+---
+title: leetcode 记录
+updated: 2020.12.21  
+date: 2020.12.21  
 ---
 
 ## 目录

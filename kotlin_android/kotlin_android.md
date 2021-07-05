@@ -1,14 +1,12 @@
-# kotlin & android 笔记
-
-> [lzyprime 博客 (github)](https://lzyprime.github.io)  
-> 创建时间：2020.10.22  
-> qq及邮箱：2383518170  
-
+---
+title: kotlin & android 笔记
+updated: 2020.10.22
+date: 2020.10.22
 --- 
 
 ## 目录：
 
-0. [λ](kotlin_mvvm.md)
+0. [λ](kotlin_android.md)
 1. [android mvvm架构](android_mvvm.md)
 2. [android navigation组件](android_navigation.md)
 3. [android 底部导航栏+页面切换](android_bottom_navigation.md)

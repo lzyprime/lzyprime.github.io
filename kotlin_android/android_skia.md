@@ -1,8 +1,8 @@
-# Android Skia图形库
-
-> [lzyprime 博客 (github)](https://lzyprime.github.io)   
-> 创建时间：2020.12.17  
-> qq及邮箱：2383518170  
+---
+title: Android Skia图形库
+updated: 2020.12.17  
+date: 2020.12.17  
+---
 
 ## [kotlin & android 笔记](https://lzyprime.github.io/kotlin_android/kotlin_android)
 

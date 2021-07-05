@@ -1,8 +1,8 @@
-# Linux 下 vmware 虚拟机
-
-> [lzyprime 博客 (github)](https://lzyprime.github.io)   
-> 创建时间：2019.10.26  
-> qq及邮箱：2383518170  
+---
+title: Linux 下 vmware 虚拟机
+updated: 2019.10.26  
+date: 2019.10.26  
+---
 
 ## λ：
 

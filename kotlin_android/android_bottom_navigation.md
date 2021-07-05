@@ -1,9 +1,8 @@
-# Android 底部导航栏+页面切换
-
-> [lzyprime 博客 (github)](https://lzyprime.github.io)   
-> 更新时间: 2020.12.21  
-> 创建时间：2020.11.25  
-> qq及邮箱：2383518170  
+---
+title: Android 底部导航栏+页面切换
+updated: 2020.12.21  
+date: 2020.11.25  
+---
 
 ## [kotlin & android 笔记](https://lzyprime.github.io/kotlin_android/kotlin_android)
 

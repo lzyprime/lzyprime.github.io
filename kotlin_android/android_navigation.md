@@ -1,8 +1,8 @@
-# Android navigation组件
-
-> [lzyprime 博客 (github)](https://lzyprime.github.io)   
-> 创建时间：2020.11.24  
-> qq及邮箱：2383518170  
+---
+title: Android navigation组件
+updated: 2020.11.24  
+date: 2020.11.24  
+---
 
 ## [kotlin & android 笔记](https://lzyprime.github.io/kotlin_android/kotlin_android)
 

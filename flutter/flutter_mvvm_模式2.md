@@ -1,9 +1,8 @@
-# flutter mvvm 模式 2020.01
-
-> [lzyprime 博客 (github)](https://lzyprime.github.io)  
-> 创建时间：2020.01.16  
-> qq及邮箱：2383518170  
-
+---
+title: flutter mvvm 模式 2020.01
+updated: 2020.01.16
+date: 2020.01.16  
+---
 
 ## λ：
 
@@ -26,7 +25,7 @@ mvvm 在 [原文章](https://lzyprime.github.io/flutter/flutter_mvvm_模式.html
 
 ### 1. 添加插件：`provider ^4.0.1`（`rxdart ^0.23.1` PS: 如果用不到 `rxdart` 的东西，可以不要这个插件）。 在 `pubspec.yaml` 文件
 
-![pubspec.yaml](flutter_mvvm_模式2/pubspec.png)
+![pubspec.yaml](../flutter_mvvm_模式2/pubspec.png)
 
 ### 2. `view`， 构建UI，数据来源于`viewModel`
 
@@ -192,16 +191,16 @@ class MyApp extends StatelessWidget {
 ## 效果图
 
 - ###  state == 0， 未请求
-![state0](flutter_mvvm_模式2/state0.png)
+![state0](../flutter_mvvm_模式2/state0.png)
 
 - ### state == 1, 显示加载
-![state1](flutter_mvvm_模式2/state1.png)
+![state1](../flutter_mvvm_模式2/state1.png)
 
 - ### state == 2, 请求成功
-![state2](flutter_mvvm_模式2/state2.png)
+![state2](../flutter_mvvm_模式2/state2.png)
 
 - ### state == 3, 请求失败
-![state2](flutter_mvvm_模式2/state3.png)
+![state2](../flutter_mvvm_模式2/state3.png)
 
 ## ～λ：
 

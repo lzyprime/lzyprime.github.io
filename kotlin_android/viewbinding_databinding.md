@@ -1,8 +1,8 @@
-# android ViewBinding, DataBinding
-
-> [lzyprime 博客 (github)](https://lzyprime.github.io)   
-> 创建时间：2021.04.23  
-> qq及邮箱：2383518170  
+---
+title: android ViewBinding, DataBinding
+updated: 2021.04.23
+date: 2021.04.23
+---
 
 ## [kotlin & android 笔记](https://lzyprime.github.io/kotlin_android/kotlin_android)
 

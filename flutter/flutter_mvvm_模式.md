@@ -1,9 +1,8 @@
-# flutter mvvm 模式
-
-> [lzyprime 博客 (github)](https://lzyprime.github.io)  
-> 更新时间：2020.01.16  
-> 创建时间：2019.11.17  
-> qq及邮箱：2383518170  
+---
+title: flutter mvvm 模式
+updated: 2020.01.16
+date: 2019.11.17
+---
 
 ## 2020.01.16 更新
 yesterday， 收到网友反馈，照抄如下内容不好用，希望我出个demo。 咋能不好用呢，下边这代码本身就可以当 demo 啊。于是老夫也照抄试了试，老夫也是一片爆红。。
@@ -36,7 +35,7 @@ git clone -b mvvm_demo https://github.com/lzyprime/flutter_demos.git
 
 ## mvvm
 
-![mvvm](flutter_mvvm_模式/mvvm.png)
+![mvvm](../flutter_mvvm_模式/mvvm.png)
 
 `viewModel` 作为 `view` 和 `model` 的中间者，处理`view`发出的请求，并在`model`数据等变化时，通知`view` 更新UI。
 
@@ -46,7 +45,7 @@ git clone -b mvvm_demo https://github.com/lzyprime/flutter_demos.git
 
 ### 1. 添加插件：`provider ^3.1.0+1` , `rxdart ^0.22.2`。 在 `pubspec.yaml` 文件
 
-![pubspec.yaml](flutter_mvvm_模式/pubspec.png)
+![pubspec.yaml](../flutter_mvvm_模式/pubspec.png)
 
 ### 2. `view`， 构建UI，数据来源于`viewModel`
 
@@ -165,13 +164,13 @@ class MyApp extends StatelessWidget {
 ## 效果图
 
 - ###  state == 0， 初始状态
-![state0](flutter_mvvm_模式/state0.png)
+![state0](../flutter_mvvm_模式/state0.png)
 
 - ### state == 1, 点击登录后，显示加载
-![state1](flutter_mvvm_模式/state1.png)
+![state1](../flutter_mvvm_模式/state1.png)
 
 - ### state == 2, 登录成功
-![state2](flutter_mvvm_模式/state2.png)
+![state2](../flutter_mvvm_模式/state2.png)
 
 ## ~λ：
 

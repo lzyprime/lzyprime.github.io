@@ -1,13 +1,14 @@
-# flutter自定义弹窗(一)：overlay
-> [lzyprime 博客 (github)](https://lzyprime.github.io)  
-> 创建时间：2020.08.20  
-> qq及邮箱：2383518170  
+---
+title: flutter自定义弹窗(一)：overlay
+date: 2020.08.20
+updated: 2020.08.20
+---
 
 ## λ: 
 
 > ***当前flutter版本：1.20.2***
 
-![需求](flutter_overlay/1.png)
+![需求](../flutter_overlay/1.png)
 
 需求如图(画的示意图)，点击按钮弹出菜单区域，点击另外按钮时，关闭当前菜单同时打开对应菜单。
 
@@ -98,7 +99,7 @@ class _Theatre extends MultiChildRenderObjectWidget
 
 由于`Overlay`底层是个特殊`Stack`, 所以`OverlayEntry`里可以放`Positioned`, 可以`Positioned.fill`看一下可控范围:
 
-![范围](flutter_overlay/2.png)
+![范围](../flutter_overlay/2.png)
 
 满屏。用`Positioned`控制布局位置和大小，这就是另外的事情了。
 
@@ -119,13 +120,13 @@ git clone -b flutter_overlay https://github.com/lzyprime/flutter_demos.git
 ```
 
 ### demo1: 菜单弹窗
-![demo1](flutter_overlay/3.gif)
+![demo1](../flutter_overlay/3.gif)
 
 关于怎么确定按钮下方的坐标，老生常谈。
 
 ### demo2: 跟随按钮滚动
 
-![demo2](flutter_overlay/4.gif)
+![demo2](../flutter_overlay/4.gif)
 
 一个部件跟随另一个部件滚动，要用到 `CompositedTransformTarget` 和 `CompositedTransformFollower`，通过`LayerLink`绑定在一起。
 
