@@ -2,7 +2,7 @@
 
 ## 链接 🔗
 
-#### [android app](https://lzyprime.github.io/DNUIFoodApp/) | [kotlin & android 笔记](https://lzyprime.github.io/kotlin_android/kotlin_android) | [leetcode 笔记](https://lzyprime.github.io/leetcode/leetcode)
+#### [android app](https://lzyprime.github.io/DNUIFoodApp/) | [kotlin & android 笔记](https://lzyprime.github.io/kotlin_android/kotlin_android) | [leetcode 笔记](https://lzyprime.github.io/leetcode/leetcode) | [自写blog主题](https://lzyprime.github.io/blog-theme)
 
 ---
 
@@ -12,6 +12,7 @@
 
 | 文章 | 日期 |
 | :- | -: |
+| [我这四个月干了些什么?](posts/我这四个月干了些什么.md) | 2021.8.4 |
 | [android ViewBinding, DataBinding](kotlin_android/viewbinding_databinding.md) | 2021.4.23 |
 | [263. 丑数(每日一题)](leetcode/263_丑数.md) | 2021.4.10 |
 | [153. 寻找旋转排序数组中的最小值(每日一题)](leetcode/153_寻找旋转排序数组中的最小值.md) | 2021.4.8 |
