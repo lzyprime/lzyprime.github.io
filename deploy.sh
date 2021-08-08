@@ -27,7 +27,7 @@ function update_source() {
 function push() {
 	git init
 	git add .
-	git commit -m "update"
+	git commit -m "update time: `date '+%Y-%m-%d %H:%M'`"
 	git remote add origin git@github.com:lzyprime/lzyprime.github.io.git
 	git push origin main -f
 }
