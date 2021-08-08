@@ -2,6 +2,8 @@
 title: android ViewBinding, DataBinding
 updated: 2021.04.23
 date: 2021.04.23
+tags: [ kotlin, android ]
+categories: [ kotlin_android ]
 ---
 
 ## [kotlin & android 笔记](https://lzyprime.github.io/kotlin_android/kotlin_android)

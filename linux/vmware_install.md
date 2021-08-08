@@ -2,6 +2,8 @@
 title: Linux 下 vmware 虚拟机
 updated: 2019.10.26  
 date: 2019.10.26  
+tag: [ linux, 虚拟机 ]
+category: [ linux ]
 ---
 
 ## λ：

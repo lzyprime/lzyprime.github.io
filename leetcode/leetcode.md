@@ -2,6 +2,8 @@
 title: leetcode 记录
 updated: 2020.12.21  
 date: 2020.12.21  
+tags: [ leetcode ]
+categories: [ leetcode ]
 ---
 
 ## 目录

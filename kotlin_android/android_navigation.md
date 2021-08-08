@@ -2,6 +2,8 @@
 title: Android navigation组件
 updated: 2020.11.24  
 date: 2020.11.24  
+tags: [ kotlin, android ]
+categories: [ kotlin_android ]
 ---
 
 ## [kotlin & android 笔记](https://lzyprime.github.io/kotlin_android/kotlin_android)

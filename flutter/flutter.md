@@ -2,6 +2,8 @@
 title: flutter 学习笔记
 date: 2019.10.22
 updated: 2019.10.22
+tags: [flutter]
+categories: [flutter]
 ---
 
 ## λ：

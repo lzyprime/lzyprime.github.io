@@ -2,6 +2,10 @@
 title: flutter web 搭建静态博客
 date: 2019.10.22
 updated: 2019.10.22
+tags: [flutter, flutter_web ]
+categories: 
+  - [ flutter ]
+  - [ flutter_web ]
 ---
 
 ## λ :
