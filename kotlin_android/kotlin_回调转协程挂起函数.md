@@ -4,7 +4,7 @@ updated: 2021.8.7
 date: 2021.8.7
 tags: [ kotlin, android ]
 categories:
- - [ kotlin, android ]
+ - [ kotlin_android ]
 ---
 
 ## λ：

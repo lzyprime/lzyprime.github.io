@@ -6,15 +6,6 @@ tags: [ kotlin, android ]
 categories: [ kotlin_android ]
 --- 
 
-## 目录：
-
-0. [λ](kotlin_android.md)
-1. [android mvvm架构](android_mvvm.md)
-2. [android navigation组件](android_navigation.md)
-3. [android 底部导航栏+页面切换](android_bottom_navigation.md)
-4. [android skia图形库](android_skia.md)
-5. [android ViewBinding, DataBinding](viewbinding_databinding.md)
-
 ## λ：
 
 一直想写这份笔记。单是`kotlin`，就值得写。而`kotlin`早已被定为`android`开发一等语言，这也是`kotlin`最大的用武之地，所以把这两个东西放一块。
