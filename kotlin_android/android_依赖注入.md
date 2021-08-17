@@ -2,7 +2,7 @@
 title: android 依赖注入
 date: 2021.08.17
 updated: 2021.08.17
-tag: [android, hilt]
+tag: [android, 依赖注入]
 category: [kotlin_android]
 ---
 
