@@ -6,6 +6,13 @@ tag: [android, 依赖注入]
 category: [kotlin_android]
 ---
 
+> [github blog](https://lzyprime.github.io) 
+> 
+> qq: 2383518170  
+>
+> wx: lzyprime  
+
+
 ## λ：
 
 ##### 仓库地址: [https://github.com/lzyprime/android_demos](https://github.com/lzyprime/android_demos)

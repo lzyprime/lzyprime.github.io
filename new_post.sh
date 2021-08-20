@@ -17,6 +17,12 @@ tag: []
 category: []
 ---
 
+> [github blog](https://lzyprime.github.io)
+>
+> qq: 2383518170
+>
+> wx: lzyprime
+
 ## λ：
 
 EEE
