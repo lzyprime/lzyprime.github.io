@@ -1,7 +1,7 @@
 ---
 title: android 依赖注入
 date: 2021.08.17
-updated: 2021.08.17
+updated: 2021.08.21
 tag: [android, 依赖注入]
 category: [kotlin_android]
 ---
@@ -33,7 +33,7 @@ category: [kotlin_android]
 
 无论是哪个库，原理都是一样的：
 
-1. 在`Application, Activity, Fragment`中开一个容器`Container`
+1. 根据`Application, Activity, Fragment`等为范围，开不同的容器`Container`。
 
 2. 所依赖的实例从`Container`中获得，并以单例存在于`Container`中
 
@@ -63,7 +63,7 @@ category: [kotlin_android]
 
 - 必须自行管理 `Container`，手动为依赖项创建实例，根据生命周期移除实例
 - 样板代码
-- `ViewModel`依赖注入，要靠`ViewModelProvider.Factory`才可以复用`Jetpack`中的内容. 或者放进容器，自己维护`ViewModel`生命周期。
+- `ViewModel`依赖注入，要靠`ViewModelProvider.Factory`才可以复用`Jetpack`中的获取方式. 或者放进容器，自己维护`ViewModel`生命周期。
 
 依赖注入有什么好处是老生常谈。当然可以不用，通篇`object`, 直接就单例，到处可以使用。 
 
@@ -75,7 +75,7 @@ category: [kotlin_android]
 
 ## Hilt
 
-`Hilt`做法是改变并拓展基类，比如继承自`Application`的，通过生成的`Hilt_XXApplication`，在里边实现容器维护。可以看生成的代码。
+`Hilt`做法是改变并拓展基类，比如继承自`class XXApplication : Application()`的，编译器插件生成`Hilt_XXApplication`类，在里边实现容器维护。也就是变为`class XXApplication : Hilt_XXApplication()`。可以看生成的代码。
 
 ### 开容器
 
@@ -110,55 +110,124 @@ class MainActivity : AppCompatActivity() {
 ```kotlin
 interface XXService { ... }
 
-class XXServiceImpl @Inject constructor(
-  ...
-) : XXService { ... }
+class XXServiceImpl @Inject constructor(...) : XXService { ... }
 
 @Module
 @InstallIn(ActivityComponent::class)
 abstract class XXModule {
-
+    
   @Binds
-  abstract fun bindAnalyticsService(
-    xxServiceImpl: XXServiceImpl
-  ): XXService
+  abstract fun bindAnalyticsService(impl: XXServiceImpl): XXService
+}
+
+// or
+
+@Module
+@InstallIn(ActivityComponent::class)
+interface XXModule {
+    
+  @Binds
+  fun bindAnalyticsService(impl: XXServiceImpl): XXService
 }
 ```
 
 #### @Provides
 
 ```kotlin
-interface XXService {
-    ...
-    companion object : XXService {
-        ...
-    }
-}
-
 @Module
-@InstallIn(ActivityComponent::class)
+@InstallIn(SingletonComponent::class)
 object XXModule {
   @Provides
-  fun provideXXService(): XXService = XXService
+  fun provideSDKManager(aInject:A, bInject:B): SDKManager = SDK.getManager(aInject, bIject)
+
+  @Singleton
+  @Provides
+  fun provideYYService():YYService = Retrofit....create(YYService::class.java)
 }
 ```
 
-两种方式都可以标记某个实例的获取方式。`@InstallIn(ActivityComponent)` 标记存放在Activity的容器`Container`中。参照表：
+两种方式都可以标记某个实例的获取方式。`@Bind`的参数内容是可以通过依赖注入得到的，然后会把它作为返回内容。`@Provides`可以提供具体构造方式, 比如`Retrofit`创建实例的过程。当然全写成`Provides`也是可以跑的。
+
+`@InstallIn(XXX::class)` 标记`Module`存放在哪个容器中，也就是它的范围。参照表：
+
 |component | 注入到 | create at | destroyed at|
 |:-:|:-:|:-:|:-:|
 |SingletonComponent|Application|Application#onCreate()|Application#onDestroy()|
 |ActivityRetainedComponent|N/A|Activity#onCreate()|Activity#onDestroy()|
-|ViewModelComponent|ViewModel|ViewModel created |ViewModel destroyed|
 |ActivityComponent|Activity|Activity#onCreate()|Activity#onDestroy()|
+|ViewModelComponent|ViewModel|ViewModel created |ViewModel destroyed|
 |FragmentComponent|Fragment|Fragment#onAttach()|Fragment#onDestroy()|
 |ViewComponent|View|View#super() | View destroyed|
 |ViewWithFragmentComponent|View annotated with @WithFragmentBindings|View#super()|View destroyed|
 |ServiceComponent|Service|Service#onCreate()|Service#onDestroy()|
 
+所以在`Provides`例子中，范围是`SingletonComponent`，此时函数上打了 `@Singleton`标签。作用是限定函数只调用一次，产生的实例以单例形式存在。因为`Activity, Fragment`等都能拿到`Module`，如果不打，则他们会各自维护一份的单例。
+
+没有 `@InstallIn(ActivityRetainedComponent::class)`。
+
+每一个其实就是对应一个容器，要么自己维护，要么挂到其他容器下。
+
+#### 容器关系
+
+`Hilt` 就是个 `Dagger` 的API层，限定简化了注入方式。所以 `@HiltAndroidApp`, `@AndroidEntryPoint` 最后还是 `Dagger` 实现。看一下生成的代码，大概就通过 `EntryPoint` 一层层关联起容器。就算没搞过 `Dagger` 也大概能看懂过程：
+
+`Application` 中会创建 `ApplicationComponentManager`。同时提供下层容器单例的获取方式等。把自己放进 `SingletonComponent`。
+
+```kotlin
+// Activity 创建自己的ActivityComponentManager
+class Hilt_XXXActivity {
+    val componentManager: ActivityComponentManager
+    protected fun inject() {
+        (componentManager.generatedComponent as Injector).inject(this as XXXActivity)
+    }
+}
+
+class ActivityComponentManager(val activity:Activity) {
+    val activityRetainedComponentManager = ActivityRetainedComponentManager(activity as ComponentActivity)
+
+    fun generatedComponent() = activityRetainedComponentManager.generatedComponent()
+}
+
+class ActivityRetainedComponentManager(val activity: ComponentActivity) {
+    val viewModelProvider = ViewModelProvider(activity, Factory {
+        return ActivityRetainedComponentViewModel(
+            // 也就是 ActivityRetainedComponent 的单例
+            (获取Application).activityRetainedComponentBuilder.build()
+        )
+    })
+
+    fun generatedComponent() = viewModelProvider.get(ActivityRetainedComponentViewModel.class).getComponent()
+}
+
+class ActivityRetainedComponentViewModel(val component : ActivityRetainedComponent) : ViewModel() {
+    fun getComponent() = component
+    override fun onCleared() {
+        getActivityRetainedLifecycle().dispatchOnCleared()
+    }
+}
+
+@ActivityRetainedScoped
+@DefineComponent(parent = SingletonComponent.class)
+public interface ActivityRetainedComponent {}
+```
+
+简化一下, 也就是把自己放进了 `ActivityRetainedComponent` 单例, 并通过ViewModel生命周期，在销毁时，摘掉自己: 
+
+```kotlin
+class Hilt_XXXActivity {
+    val componentManager: ActivityComponentManager
+    protected fun inject() {
+        activityRetainedComponentImpl.inject(this as XXXActivity)
+    }
+}
+```
+
+而 `ActivityRetainedComponent` 单例在构造时，会包含 `SingletonComponent` 的单例。`ActivityComponent` 中会包含这两个的单例。 同理依次类推。
+
 除此之外，也可以通过标记作用域的方式，标记存放在哪个容器中，如:
 
 ```kotlin
-@Singleton // 放入Application容器中，相当于全局单例
+@Singleton // 放入SingletonComponent中
 class UserRepository @Inject constructor(...)
 ```
 
@@ -175,7 +244,11 @@ class UserRepository @Inject constructor(...)
 |View annotated with @WithFragmentBindings|	ViewWithFragmentComponent | @ViewScoped |
 |Service|ServiceComponent|@ServiceScoped|
 
-这些花里胡哨的最后影响的不过是实例的生存周期，以及单例范围，如标记了Activity内，则每个Activity都会各自维护一份单例。以此类推
+源码比这绕口的多，但大致流程如此。这也是为什么低层次的可以直接用高层次里的东西。
+
+官方给的关系图：
+
+![](android_依赖注入/1.svg)
 
 #### 为实例提供多个获取方式
 
@@ -188,9 +261,7 @@ annotation class DebugService
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class ReleaseService
-```
 
-```kotlin
 // module
 @Module
 @InstallIn(ApplicationComponent::class)
@@ -204,9 +275,7 @@ object NetworkModule {
   @Provides
   fun provideReleaseService(): XXService = XXService(release_url)
 }
-```
 
-```kotlin
 // use
 class UserRepository @Inject constructor(
     @DebugService service: XXService
@@ -214,7 +283,7 @@ class UserRepository @Inject constructor(
 
 // or
 class Example {
-    @Release
+    @ReleaseService
     @Inject lateinit var okHttpClient: OkHttpClient
 }
 ```
@@ -223,14 +292,14 @@ class Example {
 
 ```kotlin
 class AnalyticsAdapter @Inject constructor(
-    @ActivityContext private val context: Context,
+    @ApplicationContext private val context: Context,
     private val service: AnalyticsService
 ) { ... }
 ```
 
 ### ViewModel
 
-使用`@HiltViewModel`标记，在Activity中仍然可以通过 `by viewModel()` 的方式获取到。
+使用 `@HiltViewModel` 标记，在Activity中仍然可以通过 `by viewModels()` 的方式获取到。
 
 ```kotlin
 @HiltViewModel
@@ -248,11 +317,17 @@ class ExampleActivity : AppCompatActivity() {
 }
 ```
 
-要了解如何做到的，首先要知道`by viewModel()`如何实现。完整的函数是要传`ViewModel Factory` 获取方式的，缺省值为空，当什么都不穿时，会调用`Activity#getDefaultViewModelProviderFactory`。会创建个默认工厂。
+要了解如何做到的，首先要知道`by viewModels()`如何实现。完整的函数是:
 
-而`Hilt`实现的注入方式，就是改变并拓展基类。所以在生成的Activity基类里，`override`掉这个函数，先去Hilt中找，没有匹配的则返回默认行为。
+```kotlin
+@MainThread
+public inline fun <reified VM : ViewModel> ComponentActivity.viewModels(noinline factoryProducer: (() -> Factory)? = null)
+```
+要传 `ViewModel Factory` 获取方式。 当为默认值(null)时，会调用`Activity#getDefaultViewModelProviderFactory` 得到 `Factory`。
 
-这是`Koin`与`Hilt`明显差别之一。 `Koin`类似于把手动注入的过程封装一下，所以 `by viewModel()` 是 `koin` 库额外实现的一版，与原有同名，是两个不同函数。
+而 `Hilt` 实现的注入方式，就是改变并拓展基类。所以在生成的Activity基类里，`override`这个方法，先去`Hilt`容器中找，没有匹配的则返回默认行为。
+
+这是 `Koin` 与 `Hilt` 明显差别之一。 `Koin` 类似于把手动注入的过程封装一下，所以`koin` 库做了`by viewModel()`函数，用于在容器获取。
 
 ### Navigation
 
@@ -276,11 +351,13 @@ class FooActivity : Hilt_FooActivity
 ...
 ```
 
-`Navigation SafeArgs` 同样也是用 `Gradle Plugin` 生成代码的库，所以它并不在`dependencies{ implementation "xxx" }` 而是在 `plugins{ id "xxx" }`
+但是以注解和编译器插件做的坏处是拖慢了编译速度，尤其是项目大了之后。因为有 `kotlin -> java -> kotlin` 的反复横跳。当然好处是兼容`java`，还有就是`kotlin`编译器插件没稳定。希望之后能优化，或者有更好方案。
 
 ## Koin
 
-当了解了容器的概念，再来看`Koin`，或者其他依赖注入库就很容易理解。`Koin`源码在`github`都有，可以自己扒。或者测一下实现，看库是不是与自己一样。或者觉得库哪些内容实现不优雅不好，有无更好的方案或写法。
+当了解了容器的概念，再来看`Koin`，或者其他依赖注入库就很容易理解。`Koin` 源码在 `github` 有，可以自己扒。或者猜测一下实现，看库是不是与自己一样。或者觉得库哪些内容实现不优雅不好，有无更好的方案或写法。
+
+这个库相当于提供容器维护的api。所以要手动做的事会多一点。得益于`kotlin`语法，提供的api也是简洁，灵活。
 
 ### 开容器
 
@@ -373,9 +450,7 @@ class MyViewModelActivity : AppCompatActivity() {
 }
 ```
 
-调用`Koin`库里的`viewModel函数`， 获取实例。
-
 ## ～λ：
 
-其他详细内容可看文档和源码。两个库各有优劣，相比`Koin`, `Hilt`拓展基类，生成代码的方式可能更舒服。
+其他详细内容可看文档和源码。两个库各有优劣，相比`Koin`, `Hilt`可能少写点东西，而且底层是`Dagger`，觉得提供的工具不够用时，可以直接用`Dagger`胡搞。***编译真的慢***， 这几天刚把公司项目加了`Hilt`，感觉编译长了1.5倍左右。当然项目不算大，总体也耗不了多久，可以接受。
 
