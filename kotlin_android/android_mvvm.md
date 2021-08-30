@@ -2,11 +2,7 @@
 title: android mvvm架构
 date: 2020.10.23
 tags: [ kotlin, android, mvvm ]
-categories: [ kotlin_android ]
----
-
-## [kotlin & android 笔记](https://lzyprime.github.io/kotlin_android/kotlin_android)
-
+categories: [ kotlin, android ]
 ---
 
 ## λ：

@@ -3,8 +3,7 @@ title: kotlin 回调转协程挂起函数
 updated: 2021.8.7
 date: 2021.8.7
 tags: [ kotlin, android ]
-categories:
- - [ kotlin_android ]
+categories: [ kotlin, android ]
 ---
 
 ## λ：

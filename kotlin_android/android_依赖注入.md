@@ -3,7 +3,7 @@ title: android 依赖注入
 date: 2021.08.17
 updated: 2021.08.21
 tag: [android, 依赖注入]
-category: [kotlin_android]
+category: [kotlin, android]
 ---
 
 > [github blog](https://lzyprime.github.io)  
@@ -12,6 +12,7 @@ category: [kotlin_android]
 
 
 ## λ：
+
 
 ##### 仓库地址: [https://github.com/lzyprime/android_demos](https://github.com/lzyprime/android_demos)
 
@@ -169,8 +170,6 @@ object XXModule {
 所以在`Provides`例子中，范围是`SingletonComponent`，此时函数上打了 `@Singleton`标签。作用是限定函数只调用一次，产生的实例以单例形式存在。因为`Activity, Fragment`等都能拿到`Module`，如果不打，则他们会各自维护一份的单例。
 
 没有 `@InstallIn(ActivityRetainedComponent::class)`。
-
-每一个其实就是对应一个容器，要么自己维护，要么挂到其他容器下。
 
 #### 容器关系
 

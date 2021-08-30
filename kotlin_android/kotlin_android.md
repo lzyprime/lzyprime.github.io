@@ -3,7 +3,7 @@ title: kotlin & android 笔记
 updated: 2020.10.22
 date: 2020.10.22
 tags: [ kotlin, android ]
-categories: [ kotlin_android ]
+categories: [ kotlin, android ]
 --- 
 
 ## λ：
