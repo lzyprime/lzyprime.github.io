@@ -1,145 +1,201 @@
 ---
 title: Android 底部导航栏+页面切换
-updated: 2020.12.21  
+updated: 2021.9.9  
 date: 2020.11.25  
 tags: [ kotlin, android ]
 categories: [ kotlin, android ]
 ---
 
-## 更新
-
-### 2020.12.21 解决 ***“在item2页面点击返回键会返回item1, 而非退出”*** 问题
-
-之前笔记里（[android navigation组件](https://lzyprime.github.io/kotlin_android/android_navigation)）记录整个导航组件时, 其中关于自定义返回导航只是简单一提， 并用于在`MainActivity`的回调里整体组织路由。
-
-[提供自定义返回导航 官网文档](https://developer.android.google.cn/guide/navigation/navigation-custom-back?hl=zh-cn)
-
-给`Item2, Item3`页面注册返回事件， `addCallBack`用`(LifecycleOwner, OnBackPressedCallback)`版本, 会检测生存期，在页面被销毁时自动删掉回调。`OnBackPressedCallback` 构造函数传入 `Boolean` 表示回调初始是否开启（`isEnable`）, 之后可以调用它的 `setEnable` 来改变状态。 
-
-```kotlin
-// 仓库已经更新
-class Item2Fragment: Fragment(R.layout.item2_fragment){
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        requireActivity().onBackPressedDispatcher.addCallback(this, object :OnBackPressedCallback(true){
-            override fun handleOnBackPressed() {
-                requireActivity().finish()
-            }
-        })
-    }
-}
-```
-
--------
-# 原文：
-
 ## λ：
 
+> 2021.9.9更新： 之前版本把页面切换直接放进了Activity, 跳转其他页是靠启动新Activity。但实践中都是单Activity模式，所以重新整理一下。
+
 ```bash
-# android bottom navigation demo
 # 仓库地址: https://github.com/lzyprime/android_demos
 # branch: bottom_navigation
 
 git clone -b bottom_navigation https://github.com/lzyprime/android_demos
 ```
 
+
 底部导航配合多页面切换是常见逻辑，微信，qq，抖音，淘宝等等，常见app里几乎都有这种设计。
 
-底部导航栏涉及到图标和标题在点击时的变化（颜色，大小，选中与未选中图标变化）
+底部导航栏：`BottomNavgationView + menu`, 涉及到图标和标题在点击时的变化（颜色，大小，选中与未选中图标变化）
 
-而上方的页面切换有两个常用方案：
+页面切换有两个方案：
 
-1. 用之前说过的 **[navigation组件](https://lzyprime.github.io/kotlin_android/android_navigation)**
+1. [Navigation组件](https://lzyprime.github.io/kotlin_android/android_navigation)
 
-2. **[ViewPager2](https://developer.android.google.cn/guide/navigation/navigation-swipe-view-2)**
+2. [ViewPager2](https://developer.android.google.cn/guide/navigation/navigation-swipe-view-2)
 
 
-参考 [使用 NavigationUI 更新界面组件](https://developer.android.google.cn/guide/navigation/navigation-ui)。 会发现用`navigation组件`实现这套东西时可以一行代码搞定。甚至在 *`创建新Android Activity`* 时提供了生成版本：
+参考 [使用 NavigationUI 更新界面组件](https://developer.android.google.cn/guide/navigation/navigation-ui)。 会发现用`navigation组件`实现页面切换可以一行代码搞定。但是单Activity模式下，会有NavHost嵌套，需要处理层级问题。并且默认情况下，页面是不保存状态的，切页面每次都重建，`2.4.0`会加saveState处理。
 
-![](android_bottom_navigation/1.png)
+`ViewPager2`，底层是`RecyclerView`, 相比`Navgation`会有页面缓存，支持滑动切页手势，也不会有NavHost嵌套问题。
 
-这本身就可以当个demo。包含了底部栏如何配置，NavHost怎么设置。而且其中的Fragment还有`ViewModel`。
+## Activity 
 
-但有一个问题就是每次切换页面，Fragment都是重新构建的，就算数据可以在`ViewModel`活着，但是其他状态还是需要自己维护，比如列表滑动位置。
+```yaml
+Activity
+|- MainNavHost
+  |- MainNavFragment(home)
+  | |- HomePageNavHost
+  | | |- Item1Fragment(home)
+  | | |- Item2Fragment
+  | | |- Item3Fragment
+  | | 
+  | |- BottomNavgationView
+  |  
+  |  
+  |- SecondaryFragment
+    |- ViewPager
+    | |- Item3Fragment(home)
+    | |- Item2Fragment
+    | |- Item1Fragment
+    |- BottomNavgationView
+```
 
-所以改用`ViewPager2`， 通过设置`offscreenPageLimit`来缓存页面。`ViewPager2`底层是`RecyclerView`, 用来替代之前的`ViewPager`, 尽力保持两版接口一致，同时解决之前遗留的很多棘手问题。
+项目总体层次图。问题主要出在`MainNavHost`,`HomePageNavHost`嵌套问题上。
 
-## 1. 底部导航栏：`BottomNavigationView`
+```xml
+<!-- activity_main.xml -->
+<androidx.coordinatorlayout.widget.CoordinatorLayout ...>
+    <androidx.fragment.app.FragmentContainerView
+        ...
+        android:id="@+id/mainNavHost"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/main_graph" />
 
-- 创建新的`android Resource file`, 类型选择`menu`。 添加`menuItem`
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+```
 
-![](android_bottom_navigation/2.png)
+Activity中只放一个`NavHostFragment`组织全局导航。 `defaultNavHost=true`拦截系统返回按钮, 执行`navigateUp`。
 
-- 在`activity_main.xml`添加`BottomNavigationView`控件，同时设置`menu`参数，之前设置的`menuItem`标题和图标会在底部栏直接显示。同时可以通过底部栏的`itemIconTint`等参数，设置选中态与未选中态的区别
+`main_graph`: 
 
-![](android_bottom_navigation/3.png)
+![main_graph](android_bottom_navigation/1.png)
 
-## 2. 页面切换：
+## Navigation 实现页面切换
 
-### 方案1: `navigation`
+```xml
+<!-- main_nav_fragment.xml -->
+<LinearLayout ...>
+    <androidx.fragment.app.FragmentContainerView
+        ...
+        android:id="@+id/homePageNavHost"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        app:navGraph="@navigation/main_nav_graph" />
+    
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        ...
+        android:id="@+id/mainBtmNavView"
+        app:menu="@menu/main_nav_menu" />
+</LinearLayout>
+```
 
-- 添加 `NavHost`。如 [navigation组件](https://lzyprime.github.io/kotlin_android/android_navigation) 中方式，添加导航图与目的地。
+`main_nav_graph`:
 
-- **注意`id`与`menu`中相同，`navController`通过`id`将导航图与底部栏链接**
+![main_nav_graph](android_bottom_navigation/2.png)
 
-![](android_bottom_navigation/4.png)
+`main_nav_menu`:
 
-```kotlin 
-// MainActivity
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+![main_nav_menu](android_bottom_navigation/3.png)
 
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.mainNavHost) as NavHostFragment
-        mainBtmNavView.setupWithNavController(navHostFragment.findNavController())
+```kotlin
+class MainNavFragment : Fragment(R.layout.main_nav_fragment) {
+    private val binding by viewBinding<MainNavFragmentBinding>()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val navController =
+            (childFragmentManager.findFragmentById(R.id.homePageNavHost) as NavHostFragment).navController
+        binding.mainBtmNavView.setupWithNavController(navController)
     }
 }
 ```
 
-点击底部栏便可以切换页面。
+通过`setupWithNavController`将NavHost与BottomNavgationView绑定。内部就是给BottomNavgationView设置Listener, 监听`onNavigationItemSelected(MenuItem item)`事件。然后通过`item.itemId`导航到同id目的地。
 
-### 方案2: `ViewPager2`
+***所以，`menu` 中id要与 `导航图` 中一致***
 
-点击第一页按钮，跳转新的`Activity`，将页面上方替换为`ViewPager2`, 其他不变。
-
-- `ViewPager2` 设置 `adapter`, 负责页面切换和组织(`FragmentStateAdapter`)。
-- `ViewPager2` 设置 `offscreenPageLimit`， 起到缓存作用
-- `ViewPager2` 注册 `OnPageChangeCallback`，页面滑动切换时回调，相当于`ViewPager`中`OnPageChangeListener`。 页面切换完成时，设置底部导航栏对应切换。
-- 如果不想滑动切换页面, 设置 `ViewPager2` 的 `isUserInputEnabled = false`, 不必注册回调
-- 底部导航栏设置点击事件，`ViewPager2`跳转对应页面。
-
-打印log验证页面是否保活。
+但是如果想在子页面`Item1, Item2, Item3`操作全局导航，就要想办法拿到`MainNavHost`的navController：
 
 ```kotlin
-class SecondaryActivity : AppCompatActivity() {
+class Item1Fragment : Fragment(R.layout.item1_fragment) {
+    private val binding: Item1FragmentBinding by viewBinding()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        
+        val globalNavHostController = requireActivity().findNavController(R.id.mainNavHost)
+        ...
+    }
+}
+```
 
-    private val fragments = arrayOf(Item1Fragment(), Item2Fragment(), Item3Fragment())
-    private val itemIds = arrayOf(R.id.item1, R.id.item2, R.id.item3)
+按照层级关系，在子页面调用`findNavController()`会返回 `HomePageNavHost` 的 controller。所以要额外操作，去拿Activity中`MainNavHost`。 凡是`HomePageNavHost`嵌套图中的View都会有这种问题。
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_secondary)
 
-        secondaryVP.adapter = object : FragmentStateAdapter(supportFragmentManager, lifecycle) {
+### ViewPager2
+
+ViewPager2就不会有这些问题，因为在同一个NavHost下。
+
+```xml
+<!-- secondary_nav_fragment.xml -->
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout ...>
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/secondaryViewPager"
+        ... />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/secondaryBtmNavView"
+        app:menu="@menu/secondary_nav_menu" 
+        ... />
+</LinearLayout>
+```
+
+```kotlin
+class SecondaryNavFragment : Fragment(R.layout.secondary_nav_fragment) {
+    private val binding by viewBinding<SecondaryNavFragmentBinding>()
+
+    private val fragments = arrayOf(Item3Fragment(), Item2Fragment(), Item1Fragment())
+    private val itemIds = arrayOf(R.id.item3, R.id.item2, R.id.item1)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.secondaryViewPager.adapter = object : FragmentStateAdapter(this) {
             override fun getItemCount(): Int = fragments.size
             override fun createFragment(position: Int): Fragment = fragments[position]
         }
-        // 页面预加载
-        secondaryVP.offscreenPageLimit = fragments.size
 
-        // 若不想滑动切换页面时设置
-        //secondaryVP.isUserInputEnabled = false
-        secondaryVP.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        binding.secondaryViewPager.offscreenPageLimit = fragments.size
+
+        //binding.secondaryViewPager.isUserInputEnabled = false // 禁用滑动
+
+        binding.secondaryViewPager.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                secondaryBtmNavView.selectedItemId = itemIds[position]
+                binding.secondaryBtmNavView.selectedItemId = itemIds[position]
             }
         })
 
-        secondaryBtmNavView.setOnNavigationItemSelectedListener {
-            secondaryVP.currentItem = itemIds.indexOf(it.itemId)
+        binding.secondaryBtmNavView.setOnItemSelectedListener {
+            binding.secondaryViewPager.currentItem = itemIds.indexOf(it.itemId)
             true
         }
     }
+
 }
 ```
+
+ViewPager2设置：
+
+- 设置 `FragmentStateAdapter`。由于ViewPager2底层是RecyclerView, 所以这肯定是个`RecyclerView.Adapter`子类。
+- `offscreenPageLimit`， 缓存页面数
+- 注册 `OnPageChangeCallback`，监听页面滑动，页面切换完成时，设置底部导航栏选中项。
+- 如果不想滑动切换页面, `isUserInputEnabled = false`
+
+BottomNavigationView设置：
+
+设置点击事件监听，`ViewPager2` 跳转对应页面。
+
