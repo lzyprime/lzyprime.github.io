@@ -37,7 +37,7 @@ git clone -b mvvm_demo https://github.com/lzyprime/flutter_demos.git
 
 ## mvvm
 
-![mvvm](../flutter_mvvm_模式/mvvm.png)
+![mvvm](flutter_mvvm_模式/mvvm.png)
 
 `viewModel` 作为 `view` 和 `model` 的中间者，处理`view`发出的请求，并在`model`数据等变化时，通知`view` 更新UI。
 
@@ -47,7 +47,7 @@ git clone -b mvvm_demo https://github.com/lzyprime/flutter_demos.git
 
 ### 1. 添加插件：`provider ^3.1.0+1` , `rxdart ^0.22.2`。 在 `pubspec.yaml` 文件
 
-![pubspec.yaml](../flutter_mvvm_模式/pubspec.png)
+![pubspec.yaml](flutter_mvvm_模式/pubspec.png)
 
 ### 2. `view`， 构建UI，数据来源于`viewModel`
 
@@ -166,13 +166,13 @@ class MyApp extends StatelessWidget {
 ## 效果图
 
 - ###  state == 0， 初始状态
-![state0](../flutter_mvvm_模式/state0.png)
+![state0](./flutter_mvvm_模式/state0.png)
 
 - ### state == 1, 点击登录后，显示加载
-![state1](../flutter_mvvm_模式/state1.png)
+![state1](./flutter_mvvm_模式/state1.png)
 
 - ### state == 2, 登录成功
-![state2](../flutter_mvvm_模式/state2.png)
+![state2](./flutter_mvvm_模式/state2.png)
 
 ## ~λ：
 

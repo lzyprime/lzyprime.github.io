@@ -29,17 +29,3 @@ categories: [ kotlin, android ]
 - [kotlin 中文](https://www.kotlincn.net/)
 - [andorid developer 官网](https://developer.android.google.cn/?hl=zh-cn)
 
-                
-## posts
-
-|posts|date|
-|:-|-:|
-|[Android 底部导航栏+页面切换](android_bottom_navigation.md)|2021.09.09|
-|[Android DataStore](android_datastore.md)|2021.09.01|
-|[gradle迁到kts, 以及module管理](gradle_kts_and_module.md)|2021.08.29|
-|[android 依赖注入](android_依赖注入.md)|2021.08.21|
-|[kotlin 回调转协程挂起函数](kotlin_回调转协程挂起函数.md)|2021.08.07|
-|[android ViewBinding, DataBinding](viewbinding_databinding.md)|2021.04.23|
-|[Android Skia图形库](android_skia.md)|2020.12.17|
-|[Android navigation组件](android_navigation.md)|2020.11.24|
-|[android mvvm架构](android_mvvm.md)|2020.10.23|

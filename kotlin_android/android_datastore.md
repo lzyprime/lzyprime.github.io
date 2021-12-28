@@ -1,9 +1,7 @@
 ---
 title: Android DataStore
-date: 2021.09.01
-updated: 2021.09.01
-tag: [kotlin, android]
-category: [kotlin, android]
+date: 2021.09.01  
+updated: 2021.09.01  
 ---
 
 > [github blog](https://lzyprime.github.io)    
