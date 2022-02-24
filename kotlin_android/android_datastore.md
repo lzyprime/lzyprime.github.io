@@ -1,7 +1,7 @@
 ---
 title: Android DataStore
 date: 2021.09.01  
-updated: 2021.09.01  
+updated: 2022.02.24  
 ---
 
 > [github blog](https://lzyprime.github.io)    
@@ -9,47 +9,31 @@ updated: 2021.09.01
 > wx: lzyprime    
 
 ## λ：
+当前 `DataStore 1.0.0`。
 
-经过几番修改。对`DataStore`的封装方式初步定下，虽然还是不满意，但已经是目前能想到的最好的方式。等有了新想法再改。
+`DataStore`的封装已经试过好多方式。仍不满意。大概总结一下路数：
 
-目前：
+1. 为 `DataStore<Preferences>` 提供`[]`访问。
 
-```kotlin
-// key
-val UserId = stringPreferencesKey("user_id")
+2. 通过`getValue, setValue` 实现委托构造。
 
-// use:
-val userId = DS[UserId] // 取值
-DS[UserId] = "new user id" // 设值
-```
+3. 利用`()`运算符加`suspend`, 从而实现挂起效果。
+
+这里最大的限制是`[]`, `getValue, setValue` 是不能加`suspend`的。所以要么传`CoroutineScope`进来，要么加`runBloacking`。但`runBlocking` 就丧失了`DataStore`的优势，退化成 `SharedPreference`.
 
 ```kotlin
-// or delegate read and write:
-var userId by UserId(defaultValue = "") // 需要设置属性为空时的默认值。userId: String
-repo.login(userId)
-userId = "new user id"
+// api preview
+val kUserId = stringPreferencesKey("user_id")
+
+// 1.
+val userId: String? = anyDataStore[kUserId]
+val userId: String = anyDataStore[kUserId, "0"]
+anyDataStore[kUserId] = "<new value>"
+
+// 2.
+var userId: String by anyDataStore(...)
+userId = "<new value>"
 ```
-
-```kotlin
-// or readOnly
-val userId by UserId // 只读. userId: String?
-if(!userId.isNullOrEmpty()) repo.login(userId)
-```
-
-`DS`:
-```kotlin
-// DS:
-@JvmInline
-value class DSManager(private val dataStore: DataStore<Preferences>) : DataStore<Preferences> {
-    ...
-}
-
-val DS: DSManager by lazy {...}
-```
-
-提供了两套获取方式。一种是像map一样的访问风格。一种是靠属性委托的方式。`运算符重载`， `属性委托`， `内联类(用于收缩函数范围)`
-
-记录一下是如何一步步混沌邪恶的。
 
 ## DataStore API
 
@@ -155,267 +139,149 @@ anyCoroutineScope.launch { context.dataStore.data.first() }
 
 ## 封装过程
 
-### as Map
+### `[]` 操作符
 
-最常使用的也就是对某个数据的取值赋值。所以很容易想到重载`operator get`,`operator set`。也就是中括号`[]`运算符：
+#### 1. `return Flow<T?> || Flow<T>`
 
+由于`get set` 函数无法加 `suspend`, 所以`get`只能以`Flow`的形式返回值. 而如果想实现`set`的效果，就要`runBlocking`， 这样`DataStore`就失去了优势。
 ```kotlin
-suspend operator fun <T> DataStore<Preferences>.get(key: Preferences.Key<T>): T? = data.map{ it[key] }.first()
-suspend operator fun <T> DataStore<Preferences>.set(key: Preferences.Key<T>, value:T) = edit { it[key] = value }
+
+operator fun <T> DataStore<Preferences>.get(key: Preferences.Key<T>): Flow<T?> = data.map{ it[key] }
+
+operator fun <T> DataStore<Preferences>.get(key: Preferences.Key<T>, defaultValue: T): Flow<T> = data.map{ it[key] }
+
+// operator fun <T> DataStore<Preferences>.set(key: Preferences.Key<T>, value: T?) = runBlocking {
+//    edit { if(value != null) it[key] = value else it -= key }
+// }
 
 // use:
-scope.launch {
-    val userId = context.dataStore[UserId]
-    context.dataStore[UserId] = "new user id"
-}
+val userId: Flow<String?> = anyDataStore[kUserId]
+val userId: Flow<String> = anyDataStore[kUserId, ""]
+// anyDataStore[kUserId] = "<new value>"
 ```
 
-看着还行， ***但是！！！， 这两个函数不允许加`suspend`*** 。除非不是运算符函数，而是普通函数：`val userId = context.dataStore.get(UserId)`。
+#### 2. 为了解决`set`, 有了把`CoroutineScope`传进来的版本： 
 
-那用`runBlocking`做成阻塞式的？那不就开倒车了，`get`还好，但是`set`绝不能这么搞。
-
-所以有了把`CoroutineScope`传进来的版本：
+但是由于`set`过程不阻塞，如果立刻取值，可能任务执行的不及时，导致取到的是旧值。 而且如果`scope`生命结束仍没执行完，则保存失败。
 
 ```kotlin
-private val cache = mutablePreferencesOf()
-
-operator fun <T> get(key: Preferences.Key<T>): T? = cache[key] ?: runBlocking { data.map { it[key] }.first() }?.also { cache[key] = it }
-operator fun <T> DataStore<Preferences>.set(key: Preferences.Key<T>, scope: CoroutineScope, value: T) {
-    cache[key] = value
-    scope.launch(Dispatchers.IO) { edit { it[key] = value } }
+operator fun <T> DataStore<Preferences>.set(key: Preferences.Key<T>, scope: CoroutineScope, value: T?) {
+    scope.launch {
+        edit { if(value != null) it[key] = value else it -= key }
+    }
 }
 
 // use:
-val userId = context.dataStore[UserId]
-context.dataStore[UserId, lifecycleScope] = "new user id"
+anyDataStore[kUserId, anyScope] = "<new value>"
 ```
 
-- 此时这两个函数都不必在协程块里跑了。但是由于`set`过程不阻塞，相当于提交任务，如果立刻取值，可能任务执行的不及时，导致取值失败或错误。就加了`cache: MutablePreference`，同时也优化一下`get`操作的速度。
-- `set` 太丑了，而且`CoroutineScope`一般存活在某个View的生存周期内，View一死，`set`操作就被取消了。而塞完之值立马杀死View是很常见的，比如登录过程，登录成功后保存值，然后就跳转主页了。所以这个任务应该提到`Application`级别的`CoroutineScope`中。
+#### 3. 包裹`DataStore`, 加`cache`优化。
 
-然后就有了：
+加入`cache`处理更新不及时问题，但有可能 `预热DataStore` 操作不及时，导致`cache`错乱。 `get`使用了`runBlocking`，仍有隐患。
 
 ```kotlin
-// UnsplashApplication.kt
-@HiltAndroidApp
-class UnsplashApplication : Application() {
-    @ApplicationScope
-    @Inject
-    lateinit var applicationScope: CoroutineScope
+class DS(
+    private val dataStore: DataStore<Preferences>,
+    private val scope: CoroutineScope,
+) {
+    private val cache = mutablePreferencesOf()
 
     init {
-        instance = this
+        // 预热 DataStore
+        scope.launch {
+            cache += dataStore.data.first()
+        }
+    }
+
+    operator fun <T> get(key: Preferences.Key<T>): T? =
+        cache[key] ?: runBlocking {
+            dataStore.data.map { it[key] }.first()?.also { cache[key] = it }
+        }
+
+    operator fun <T> set(key:Preferences.Key<T>, value:T?) {
+        if(value != null) cache[key] = value
+        scope.launch {
+            dataStore.edit { if(value != null) it[key] = value else it -= key }
+        }
     }
 
     companion object {
-        private lateinit var instance: UnsplashApplication
-
-        operator fun getValue(ref: Any?, property: KProperty<*>): UnsplashApplication = instance
+        private const val STORE_NAME = "global_store"
+        private val Context.dataStore by preferencesDataStore(STORE_NAME)
     }
 }
 
-// DS.kt
-private val application by UnsplashApplication
-operator fun <T> DataStore<Preferences>.set(key: Preferences.Key<T>, value: T) {
-    cache[key] = value
-    application.applicationScope.launch { edit { it[key] = value } }
-}
+// use:
+// val ds: DS // 依赖注入或instance拿到单例
+val userId = ds[kUserId]
+ds[kUserId] = "<new value>"
 ```
 
-但仍有问题：如果不通过`set`, 而是`updateData`函数。 `cache`就不会更新，而且`get, set`文件顶级写，`import`的时候是`import package_path.get`，污染环境。
+> #### 总之`[]`难解决的是`runBlocking`执行。
 
-所以通过内联类收缩一下范围, 同时在`updateData`时更新`cache`：
+### `value class`, `()`操作符
+
+1. 内联类限定对`DataStore`的访问。`[]`只提供`get`操作，返回`Flow`。
+2. 通过`()`操作符暴露`DataStore<T>.edit`.
 
 ```kotlin
 @JvmInline
-value class DSManager(private val dataStore: DataStore<Preferences>) : DataStore<Preferences> {
-    override val data: Flow<Preferences> get() = dataStore.data
-    init {
-        application.applicationScope.launch { cache += data.first() }
+value class DS(private val dataStore: DataStore<Preferences>) {
+
+    operator fun <T> get(key: Preferences.Key<T>) =
+        dataStore.data.map { it[key] }
+    
+    suspend operator fun invoke(block: suspend (MutablePreferences) -> Unit) = 
+        dataStore.edit(block)
+
+    companion object {
+        private const val STORE_NAME = "global_store"
+        private val Context.dataStore by preferencesDataStore(STORE_NAME)
     }
-    override suspend fun updateData(transform: suspend (t: Preferences) -> Preferences): Preferences {
-        transform(cache)
-        return dataStore.updateData(transform)
-    }
-
-    operator fun <T> set(key: Preferences.Key<T>, value: T) { ... }
-
-    operator fun <T> get(key: Preferences.Key<T>): T? = ...
-
-    suspend operator fun invoke(transform: suspend (MutablePreferences) -> Unit) = edit(transform)
-}
-
-val DS by lazy {
-    DSManager(application.dataStore)
-}
-
-// operator invoke use:
-DS {
-    it -= UserId
-    it[Sig] = "xxx"
-}
-
-val userId = DS[UserId]
-DS[UserId] = "new user id"
-```
-
-同时，利用了`invoke`也就是括号`()`运算符，提供`edit`操作， 就有了现在的版本。但是仍会有风险在，还是`cache`问题，预热不及时等问题。保存副本，就有了数据不一致风险。
-
-可以选择干掉`cache`，不提供`set`, `get`扔`Flow<T>`回去, `application`也不用站在全局。
-
-用内联类，或者普通类，通过委托，实现`DataStore<T>`接口，同样上边的情况也可以用普通类处理，但是不要靠委托实现接口。否则`override`时，拿不到`super.xxx()`的行为。
-
-普通类处理：
-
-```kotlin
-class DSManager(context: Context): DataStore<Preferences> by context.dataStore {
-    operator fun <T> get(key: Preferences.Key<T>): Flow<T?> = data.map{ it[key] }
-    suspend operator fun invoke(transform: suspend (MutablePreferences) -> Unit) = edit(transform)
-}
-
-val DS by lazy {
-    val application by UnsplashApplication
-    DSManager(context)
 }
 
 // use
-val userIdFlow = DS[UserId]
-scope.launch { val userId = userIdFlow.first() }
-```
-
-### value by delegate
-
-如果场景严格一点：`DataStore`只提供指定`key-value`的访问，不允许其他地方自定义`Key`。
-
-向上面的访问方式，自然就限制不了，其他人可以在任何文件中定义一个`Key`, 然后取值赋值。
-
-很容易做：单例，`DataStore`私有，指暴露想开放的变量。并且`cache`也不会有什么问题。把要暴露的值做成`CoroutineScope`的拓展属性，或者继续使用`applicationScope`。同时也可以控制是否可写，是否可删除:
-
-```kotlin
-object DS {
-    private val ds by lazy {
-        val application by UnsplashApplication
-        application.dataStore
+val userId = ds[kUserId]
+suspend {
+    ds {
+        it[kUserId] = "<new value>"
+        it -= kUserId
     }
-
-    private val cache = mutablePreferencesOf()
-
-    private val UserId = stringPreferencesKey("user_id")
-
-    var CoroutineScope.userId: String
-        get() = cache[UserId] ?: runBlocking { ds.data.map { it[UserId].orEmpty() }.first() }
-        set(value) {
-            cache[UserId] = value
-            launch { ds.edit { it[UserId] = value } }
-        } 
-    
-    // or
-    var userId: String
-        get() = cache[UserId] ?: runBlocking { ds.data.map { it[UserId].orEmpty() }.first() }
-        set(value) {
-            cache[UserId] = value
-            val application by UnsplashApplication
-            application.applicationScope.launch { ds.edit { it[UserId] = value } }
-        } 
-    
-    // 可删除：
-    var userId: String？
-        get() = cache[UserId] ?: runBlocking { ds.data.map { it[UserId] }.first() }
-        set(value) {
-            val application by UnsplashApplication
-            if(value == null) {
-                cache[UserId] = value
-                application.applicationScope.launch { ds.edit { it -= UserId } }
-            } else {
-                cache[UserId] = value
-                application.applicationScope.launch { ds.edit { it[UserId] = value } }
-            }
-        }     
 }
 ```
 
-可以。但是每个变量都要写这么一份重复内容，太废了。这不就是`属性委托`编译器处理后的效果。所以做成委托：
+
+### 属性委托
 
 ```kotlin
-object DS {
-    private val ds by lazy {
-        val application by UnsplashApplication
-        application.dataStore
-    }
-
-    private val cache = mutablePreferencesOf()
-
-    private fun <T> safeKeyDelegate(key: Preferences.Key<T>, defaultValue: T) =
-        object : ReadWriteProperty<Any?, T> {
-            override fun getValue(thisRef: Any?, property: KProperty<*>): T =
-                cache[key] ?: runBlocking { ds.data.map { it[key] ?: defaultValue }.first() }
-
-            override fun setValue(thisRef: Any?, property: KProperty<*>, value: T) {
-                cache[key] = value
-                application.applicationScope.launch { ds.edit { it[key] = value } }
-            }
-
-        }
-
-    var userId: String by safeKeyDelegate(stringPreferencesKey("user_id"), "")
+abstract class PreferenceItem<T>(flow: Flow<T>) : Flow<T> by flow {
+    abstract suspend fun update(v: T?)
 }
 
-```
-
-`ReadWriteProperty<Any?, T>`处理一下。可删除：`ReadWriteProperty<Any?, T?>`, 限定可见范围：`ReadWriteProperty<UserInfo, T>`。
-
-使用:
-
-```kotlin
-login(DS.userId)
-DS.userId = "new user id"
-```
-
-### key by delegate
-
-条件放宽一点，可以自定义Key， 然后通过Key去DataStore里获取值：
-
-```kotlin
-operator fun <T> Preferences.Key<T>.invoke(defaultValue: T) = object : ReadWriteProperty<Any?, T> {
-            override fun getValue(thisRef: Any?, property: KProperty<*>): T =
-                cache[key] ?: runBlocking { ds.data.map { it[key] ?: defaultValue }.first() }
-
-            override fun setValue(thisRef: Any?, property: KProperty<*>, value: T) {
-                cache[key] = value
-                application.applicationScope.launch { ds.edit { it[key] = value } }
+operator fun <T> DataStore<Preferences>.invoke(
+    buildKey: (name: String) -> Preferences.Key<T>,
+    defaultValue: T,
+) = ReadOnlyProperty<Any?, PreferenceItem<T>> { _, property ->
+    val key = buildKey(property.name)
+    object : PreferenceItem<T>(data.map { it[key] ?: defaultValue }) {
+        override suspend fun update(v: T?) {
+            edit {
+                if (v == null) {
+                    it -= key
+                } else {
+                    it[key] = v
+                }
             }
         }
-
-operator fun <T> Preferences.Key<T>.provideDelegate(ref: Any?, property: KProperty<*>) = object : ReadWriteProperty<Any?, T?> {
-    override fun setValue(thisRef: Any?, property: KProperty<*>, value: T?) {
-        if(value == null) {...} else {...}
     }
-    
-    override fun getValue(thisRef: Any?, property: KProperty<*>): T? = ...
 }
 
-private val UserId = stringPreferencesKey("user_id")
+// use
+val userId: PreferenceItem<String> by anyDataStore(::stringPreferencesKey, "0")
+
+suspend {
+    userId.update("<new value>")
+}
 ```
 
-使用： 
-
-```kotlin
-
-// 有默认值，读写, var
-var userId by UserId("default value")
-login(userId)
-userId = "xxx"
-
-//有默认值，只读，val
-val  userId by UserId("default value")
-
-// 无默认值(可删除)，读写，var
-var userId:String? by UserId
-
-// 无默认值(可删除)，只读, val
-val userId:String? by UserId
-```
-
-## ~λ：
-
-大概就这些套路，根据项目实际情况，选择封装方式。排列组合一下。
+`Preferences.Key<T>`可以通过判别 `T` 的类型然后选择对应构造函数，匹配失败抛异常。
