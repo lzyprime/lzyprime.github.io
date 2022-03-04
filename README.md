@@ -1,5 +1,13 @@
 
 
+## Repository
+
+
+    
+    [android demos](https://lzyprime.top/android_demos), [flutter demos](https://lzyprime.top/flutter_demos)
+
+    
+
 ## tags
 
 ### ***[flutter/flutter_web](flutter/flutter_web/flutter_web.md)***, ***[flutter](flutter/flutter.md)***, ***[kotlin_android](kotlin_android/kotlin_android.md)***, ***[leetcode](leetcode/leetcode.md)***, ***[linux](linux/linux.md)***, ***[posts](posts/posts.md)***                
@@ -7,8 +15,9 @@
 
 |posts|date|
 |:-|-:|
+|[Android RecyclerView](kotlin_android/android_recyclerview.md)|2022.02.25|
+|[Android DataStore](kotlin_android/android_datastore.md)|2022.02.24|
 |[Android 底部导航栏+页面切换](kotlin_android/android_bottom_navigation.md)|2021.09.09|
-|[Android DataStore](kotlin_android/android_datastore.md)|2021.09.01|
 |[gradle迁到kts, 以及module管理](kotlin_android/gradle_kts_and_module.md)|2021.08.29|
 |[android 依赖注入](kotlin_android/android_依赖注入.md)|2021.08.21|
 |[kotlin 回调转协程挂起函数](kotlin_android/kotlin_回调转协程挂起函数.md)|2021.08.07|

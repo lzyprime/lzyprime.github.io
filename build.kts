@@ -99,6 +99,26 @@ fun createTagList(dir: File, tags: List<File>) {
     )
 }
 
+fun repoList(dir: File) {
+    if(dir != currentDir) return
+    val listFile = getPostListFile(dir) ?: return
+    listFile.appendText(
+        """
+        
+        
+        ## Repository
+        
+        
+    """.trimIndent()
+    )
+
+    listFile.appendText("""
+    
+    [android demos](https://lzyprime.top/android_demos), [flutter demos](https://lzyprime.top/flutter_demos)
+
+    """)
+}
+
 fun dfsDir(dir: File, tags: MutableList<File>): List<File> {
     File(dir, if (dir == currentDir) "README.md" else "${dir.name}.md").let {
         if (it.exists()) {
@@ -116,6 +136,10 @@ fun dfsDir(dir: File, tags: MutableList<File>): List<File> {
             acc += dfsRes
             acc
         }
+
+    if(dir == currentDir) {
+        repoList(dir)
+    }
 
     if (curTags.isNotEmpty()) {
         createTagList(dir, curTags)

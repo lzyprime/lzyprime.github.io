@@ -34,8 +34,9 @@ categories: [ kotlin, android ]
 
 |posts|date|
 |:-|-:|
+|[Android RecyclerView](android_recyclerview.md)|2022.02.25|
+|[Android DataStore](android_datastore.md)|2022.02.24|
 |[Android 底部导航栏+页面切换](android_bottom_navigation.md)|2021.09.09|
-|[Android DataStore](android_datastore.md)|2021.09.01|
 |[gradle迁到kts, 以及module管理](gradle_kts_and_module.md)|2021.08.29|
 |[android 依赖注入](android_依赖注入.md)|2021.08.21|
 |[kotlin 回调转协程挂起函数](kotlin_回调转协程挂起函数.md)|2021.08.07|
