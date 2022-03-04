@@ -78,9 +78,9 @@ public class StaggeredGridLayoutManager extends RecyclerView.LayoutManager imple
 ![](android_recyclerview/4.png)
 
 
-## Adapter
+# Adapter
 
-### `RecyclerView.Adapter<VH : RecyclerView.ViewHolder>`
+## `RecyclerView.Adapter<VH : RecyclerView.ViewHolder>`
 
 ```java
 public abstract static class Adapter<VH extends ViewHolder> {
@@ -100,11 +100,11 @@ public abstract static class ViewHolder {
 
 一个`Adapter`至少需要`override`这三个函数。 
 
-#### `getItemCount`
+### `getItemCount`
 
 返回列表项的个数。
 
-#### `onCreateViewHolder`, `getItemViewType`
+### `onCreateViewHolder`, `getItemViewType`
 
 创建一个`ViewHolder`, 如果 `ViewHolder` 有多种类型，可以通过`viewType`参数判断。 `viewType` 的值来自 `getItemViewType(position: Int)` 函数。默认返回0。 `0 <= position < getItemCount()`
 
@@ -143,7 +143,7 @@ class MsgListAdapter : RecyclerView.Adapter<MsgListAdapter.MsgViewHolder>() {
 }
 ```
 
-#### onBindViewHolder
+### onBindViewHolder
 
 `View` 创建完成，开始绑定数据。包括事件监听注册。
 
@@ -163,7 +163,7 @@ class Adapter(private val onItemClick: () -> Unit) : RecyclerView.Adapter<VBView
 }
 ```
 
-#### 更新
+### 更新
 
 由于缓存机制，更新完数据源, `ViewHolder` 也并不会立刻刷新。需要通过`Adapter`的一系列方法，显式通知发生变化的列表项。
 
