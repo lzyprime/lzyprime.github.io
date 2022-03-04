@@ -61,7 +61,8 @@ fun createPostList(dir: File, children: List<File>) {
     val listFile = getPostListFile(dir) ?: return
     listFile.appendText(
         """
-                        
+
+
         ## posts
         
         |posts|date|
@@ -91,9 +92,9 @@ fun createTagList(dir: File, tags: List<File>) {
     )
 
     listFile.appendText(
-        tags.joinToString(prefix = "### ") {
+        tags.joinToString() {
             it.invariantSeparatorsPath.drop(dir.invariantSeparatorsPath.length + 1).let { path ->
-                "***[$path]($path/${it.name}.md)***"
+                "[$path]($path/${it.name}.md)"
             }
         }
     )
@@ -112,11 +113,15 @@ fun repoList(dir: File) {
     """.trimIndent()
     )
 
-    listFile.appendText("""
+    listFile.appendText(
+    """
     
-    [android demos](https://lzyprime.top/android_demos), [flutter demos](https://lzyprime.top/flutter_demos)
+    - [android demos](https://lzyprime.top/android_demos)
+    - [flutter demos](https://lzyprime.top/flutter_demos)
 
-    """)
+
+    """.trimIndent()
+    )
 }
 
 fun dfsDir(dir: File, tags: MutableList<File>): List<File> {

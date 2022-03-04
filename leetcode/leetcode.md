@@ -17,7 +17,8 @@ categories: [ leetcode ]
 
 如 [387. 字符串中的第一个唯一字符(每日一题)](387_字符串中的第一个唯一字符.md) 中`scala`常规写法，可读性与简洁兼顾。
 
-                
+
+
 ## posts
 
 |posts|date|

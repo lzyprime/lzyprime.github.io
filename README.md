@@ -3,14 +3,15 @@
 ## Repository
 
 
-    
-    [android demos](https://lzyprime.top/android_demos), [flutter demos](https://lzyprime.top/flutter_demos)
+- [android demos](https://lzyprime.top/android_demos)
+- [flutter demos](https://lzyprime.top/flutter_demos)
 
-    
+
 
 ## tags
 
-### ***[flutter/flutter_web](flutter/flutter_web/flutter_web.md)***, ***[flutter](flutter/flutter.md)***, ***[kotlin_android](kotlin_android/kotlin_android.md)***, ***[leetcode](leetcode/leetcode.md)***, ***[linux](linux/linux.md)***, ***[posts](posts/posts.md)***                
+[flutter/flutter_web](flutter/flutter_web/flutter_web.md), [flutter](flutter/flutter.md), [kotlin_android](kotlin_android/kotlin_android.md), [leetcode](leetcode/leetcode.md), [linux](linux/linux.md), [posts](posts/posts.md)
+
 ## posts
 
 |posts|date|
