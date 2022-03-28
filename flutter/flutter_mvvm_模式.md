@@ -1,9 +1,9 @@
 ---
-title: flutter mvvm 模式  
+title: flutter mvvm 模式
 updated: 2020.01.16
-date: 2019.11.17
-tags: [flutter,mvvm]
-categories: [flutter]
+date: 2019.11.17 
+tags: [flutter,mvvm] 
+categories: [flutter] 
 ---
 
 ## 2020.01.16 更新

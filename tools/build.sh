@@ -21,10 +21,9 @@ while read i; do
     post2date["$i"]=${header[updated]:-header[date]}
 done < <(find "$root_dir" -type f -name "*.md")
 
-
 tags=()
 exclude_path=("/.git*" "/tools*")
-find "$root_dir" -type d $(for i in ${exclude_path[@]}; do printf "! -path $root_dir$i "; done) | sort -r | while read i; do
+while read i; do
     [ "$i" = "$root_dir" ] && continue
 
     posts=() && while read post; do [ "$(basename $(dirname "$post")).md" != "$(basename "$post")" ] && posts[${#posts[@]}]="$post"; done < <(find "$i" -type f -name "*.md")
@@ -42,13 +41,38 @@ $([ -f "$toc_file_name.temp" ] && cat "$toc_file_name.temp")
 
 
 | | |
-|:-:|:-:|
-$(for post in ${posts[@]}; do echo $post; echo "| [${post2title["$post"]}]($(realpath "$post" --relative-to "$i")) | ${post2date["$post"]} |)"; done)
+|:-|-:|
+$(for post in ${posts[@]}; do echo "| [${post2title["$post"]}]($(realpath "$post" --relative-to "$i")) | ${post2date["$post"]} |"; done | sort -t "|" -k 3 -r)
 EEE
 
-done
+done < <(find "$root_dir" -type d $(for i in ${exclude_path[@]}; do printf "! -path $root_dir$i "; done))
 
+cat > "index.md" << EEE
+# <center>I'm prime</center>
 
-cat > "README.md" << EEE
+## tags
+
+### | $(for tag in ${tags[@]}; do printf "***[$tag]($tag/$(basename "$tag").md)*** | "; done)
+
+## Repository
+
+- [android demos](https://lzyprime.top/android_demos)
+- [flutter demos](https://lzyprime.top/flutter_demos)
+
+---
+
+| | |
+|:-|-:|
+$(for post in ${!post2title[@]}; do echo "| [${post2title["$post"]}]($(realpath "$post" --relative-to "$root_dir")) | ${post2date["$post"]} |"; done | sort -t "|" -k 3 -r)
 
 EEE
+
+find "$root_dir" -type f -name "*.temp" | while read i; do rm -f "$i"; done
+
+git init
+git add .
+git commit -m "update at $(date "+%Y.%m.%d %H:%M")"
+git remote add origin "git@github.com:lzyprime/lzyprime.github.io.git"
+git push -f origin main
+
+echo "https://lzyprime.top"
