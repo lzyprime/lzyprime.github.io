@@ -2,8 +2,6 @@
 title: Android Skia图形库
 updated: 2020.12.17  
 date: 2020.12.17  
-tags: [ kotlin, android ]
-categories: [ kotlin, android ]
 ---
 
 ## λ：

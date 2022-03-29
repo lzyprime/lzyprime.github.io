@@ -2,8 +2,6 @@
 title: android mvvm架构
 updated: 2020.10.23
 date: 2020.10.23
-tags: [ kotlin, android, mvvm ]
-categories: [ kotlin, android ]
 ---
 
 ## λ：

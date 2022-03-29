@@ -2,8 +2,6 @@
 title: Android navigation组件
 updated: 2020.11.24  
 date: 2020.11.24  
-tags: [ kotlin, android ]
-categories: [ kotlin, android ]
 ---
 
 ## λ：

@@ -2,8 +2,6 @@
 title: ssh 免密登录
 updated: 2020.6.19
 date: 2020.6.19
-tag: [ linux, ssh ]
-category: [ linux ]
 ---
 
 

@@ -2,8 +2,6 @@
 title: android ViewBinding, DataBinding
 updated: 2021.04.23
 date: 2021.04.23
-tags: [ kotlin, android ]
-categories: [ kotlin, android ]
 ---
 
 ---

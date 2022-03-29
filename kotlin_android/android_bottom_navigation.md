@@ -2,8 +2,6 @@
 title: Android 底部导航栏+页面切换
 updated: 2021.9.9  
 date: 2020.11.25  
-tags: [ kotlin, android ]
-categories: [ kotlin, android ]
 ---
 
 ## λ：

@@ -2,8 +2,6 @@
 title: flutter mvvm 模式 2 
 updated: 2020.01.16  
 date: 2020.01.16  
-tags: [flutter, mvvm]  
-categories: [flutter]  
 ---
 
 ## λ：
