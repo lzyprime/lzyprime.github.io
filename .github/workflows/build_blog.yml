@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: build blog
-        run: bash leaf_jekyll_build.sh
+        run: bash tools/leaf_jekyll_build.sh
     
       - uses: ad-m/github-push-action@v0.6.0
         with:
