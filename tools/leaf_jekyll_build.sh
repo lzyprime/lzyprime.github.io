@@ -86,6 +86,7 @@ defaults:
       path: "" # 一个空的字符串代表项目中所有的文件
     values:
       layout: "post"
+      author: "prime"
 
 EEE
 
