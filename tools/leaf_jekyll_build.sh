@@ -102,6 +102,8 @@ EEE
 
 find "$root_dir" -type f -name "*.temp" | while read i; do rm -f "$i"; done
 
+exit
+
 git init
 git add .
 git commit -m "update at $(date "+%Y.%m.%d %H:%M")"
