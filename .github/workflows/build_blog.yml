@@ -1,0 +1,26 @@
+# This is a basic workflow to help you get started with Actions
+
+name: build sketch to blog
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the sketch branch
+  push:
+    branches: [ sketch ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: build blog
+        run: bash tools/leaf_jekyll_build.sh
+    
+      - uses: ad-m/github-push-action@v0.6.0
+        with:
+          branch: main
+          directory: tools/build_work/
