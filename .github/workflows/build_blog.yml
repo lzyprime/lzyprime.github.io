@@ -22,5 +22,6 @@ jobs:
     
       - uses: ad-m/github-push-action@v0.6.0
         with:
+          github_token: ${secrets.PUSH_TOKEN }
           branch: main
           directory: tools/build_work/
