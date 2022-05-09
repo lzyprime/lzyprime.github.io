@@ -24,7 +24,7 @@ jobs:
           bash tools/leaf_jekyll_build.sh
       - uses: ad-m/github-push-action@v0.6.0
         with:
-          github_token: ${ secrets.PUSH_TOKEN }
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: main
           force: true
           directory: tools/build_work/
