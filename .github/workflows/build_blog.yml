@@ -24,4 +24,5 @@ jobs:
         with:
           github_token: ${secrets.PUSH_TOKEN }
           branch: main
+          force: true
           directory: tools/build_work/
