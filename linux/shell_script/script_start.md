@@ -1,7 +1,7 @@
 ---
 title: shell 脚本
 date: 2022.03.30
-updated: 2022.03.30
+updated: 2022.07.15
 ---
 
 # λ：
@@ -99,102 +99,19 @@ cat /etc/shells | grep /bin
   - list中的每条命令必须以`;`或者换行符结尾。
   - `list;` 与 `{ }` 之间必须空格分割。
   - `{ }` 是两个保留字，所以整条语句在能识别保留字的区域内才有效。
-- `((expression))`, `expression：算数表达式`，如果表达式数值不为0则返回0(true), 为0返回1(false)。
+- `((expression))`, `expression：算数表达式`，参考[表达式求值](./expression.md)。
   - 等同于 `let expression`
-- `[[ expression ]]`，`expression：条件表达式`。在原本`条件表达式`基础上，支持一些高阶比较表达式。
-  - 条件表达式组合 `expr1 || (! expr2 && expr3)`
-  - `==, !=`, 符号两边内容作为字符串比较。右侧为模式串。如果启用shell的`nocasematch`，忽略大小写
-  - `=~`, 正则匹配，右侧为模式串。如果模式串语法错误，返回值为2。
-    - ***右侧模式串为正则表达式时，不能加引号，否则会作为字符串进行比较***
-    - 并非所有解释器都支持该语法，比如`zsh`便不支持。
+- `[[ expression ]]`，`expression：条件表达式`， 参考[表达式求值](./expression.md)。
   - `[[ ]]` 是两个保留字，所以整条语句在能识别保留字的区域内才有效。
   - `expression` 与 `[[ ]]` 要以空格分割。
 
-> `[ expression ]`, 并不是复合命令，而是简单命令。在 `man builtin` 查看内建命令时可见，`[` 是一条内建命令。只支持基础的条件表达式
+### for
 
-```bash
-# 正则模式串不能加引号, 否则会作为字符串进行比较
+- `for name [ [ in [ word ... ] ] ; ] do list ; done`
 
-[[ example.com =~ ^.*.com$ ]] && echo true || echo false # true
-[[ example.com =~ "^.*.com$" ]] && echo true || echo false # false
-[[ ^.*.com$ =~ "^.*.com$" ]] && echo true || echo false # true
-```
 
-# 表达式
+-----------
 
-## 算数表达式 `ARITHMETIC EVALUATION`
-
-```bash
-# 算数表达式文档
-man bash
-/ARITHMETIC EVALUATION #搜索
-
-# 内建命令文档，let, declare
-help let
-help declare
-```
-
-shell是弱类型，所有的`值`大多数情况都当作是字符串处理的。比如 `a=1;a+=1;echo $a` 结果是 11 而不是 2。
-
-要想把内容作为数值进行计算，需要用`let, declare, (())`。 `let` 和 `(())`等效。支持的运算类似C语言。按优先级:
-
-- `val++ val--`
-- `--val ++val`
-- `+val -val`
-- `!val ~val`
-- `val ** n`, 幂运算
-- `* / %`
-- `+ -`
-- `<< >>`, 位运算
-- `<= >= < >`
-- `== !=`
-- `&`
-`^`
-- `|`
-- `&&`
-- `||`
-- `expr?expr:expr`
-- `= *= /= %= += -= <<= >>= &= ^= |=`
-- `expr1 , expr2`, 逗号
-
-```bash
-a=1; let a+=1; echo $a
-
-declare -i a=1; a+=1; echo $a
-
-a=1; ((a+=1)); echo $a
-```
-
-### bool值
-
-- 数值表达式作为bool时，与C语言类似，数值为0则为false, 否则为true。
-- 而shell正好相反，一条命令执行，返回值为0则为true，否则为false。
-
-```bash
-# let expr
-
-a=1
-let a-- # 或((a--))
-echo $? # 上一条语句返回值，0(true)
-
-a=1
-let --a # 或 ((--a))
-echo $? # 1(false)
-```
-
-- 首先确定表达式范围：`a--` 和 `--a`
-- `a--` 作为数值处理，整条表达式值为1(true)，所以整条`let a--`作为命令处理，执行结果为 true(0)
-- 同理 `--a`, 数值表达式为0(false), 整条命令`let --a`结果为false(1)
-
-### 进制表示
-
-`[base#]n`, base是进制数，`2 <= base <= 64`
-
-- 不写默认十进制
-- `9 < base < 36`, 9以上数字用字母表示，不区分大小写
-- `36 <= base`, 9以上数字通过`小写字母，大写字母，@，_`表示
-- `0`开头通常表示八进制
-- `0x`, `0X`开头表示十六进制
 
 ## 变量
 
