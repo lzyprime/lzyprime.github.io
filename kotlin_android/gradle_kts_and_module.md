@@ -2,10 +2,6 @@
 title: gradle迁到kts, 以及module管理
 date: 2021.08.29
 updated: 2021.08.29
-tag: [kotlin, gradle]
-category: 
-  - [kotlin]
-  - [gradle]
 ---
 
 > [github blog](https://lzyprime.github.io)    
