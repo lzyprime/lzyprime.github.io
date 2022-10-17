@@ -21,7 +21,7 @@ jobs:
         run: |
           git config --global user.email "2383518170@qq.com"
           git config --global user.name "lzyprime"
-          bash tools/leaf_jekyll_build.sh
+          bash tools/gh_theme_build.sh
       - uses: ad-m/github-push-action@v0.6.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
