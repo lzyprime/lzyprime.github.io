@@ -89,7 +89,6 @@ find "$root_dir" -type f -name "*.temp" | while read i; do rm -f "$i"; done
 git init
 git add .
 git commit -m "update at $(date "+%Y.%m.%d %H:%M")"
-git remote add origin "git@github.com:lzyprime/lzyprime.github.io.git"
-git push -f origin main:main
+
 
 echo "https://lzyprime.top"
