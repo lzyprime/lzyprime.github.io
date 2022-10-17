@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euf
 
-root_dir="$(dirname $(realpath "$0"))/build_work"
+root_dir="$(dirname "$(realpath "$0")")/build_work"
 
 rm -rf "$root_dir"
 mkdir "$root_dir"
